@@ -11,5 +11,5 @@ int main(int argc, char *args[]){
 	SDL_DestroyWindow(surface);
 	SDL_Quit();
 	return 0;
-
+// zmiana
 }
