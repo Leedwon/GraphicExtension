@@ -1,6 +1,6 @@
 #include <SDL.h>
 
-int main(int argc, char *args[]){
+int main(int argc, char *args[]) {
 	int width = 900;
 	int height = 600;
 	SDL_Window *surface = nullptr;
