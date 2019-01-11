@@ -18,9 +18,9 @@ SDL_Color operator-(const SDL_Color & l, const SDL_Color & r){
 }
 
 bool operator==(const SDL_Color & l, const SDL_Color & r){
-	if (l.r != r.r) {
-		if (l.g != r.g) {
-			if (l.b != r.b)
+	if (l.r == r.r) {
+		if (l.g == r.g) {
+			if (l.b == r.b)
 				return true;
 		}
 	}
