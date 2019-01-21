@@ -7,6 +7,14 @@ Converter::Converter() {
 // just temporary solution pallete should be created based on image TODO :: 
 std::array<SDL_Color, Constants::PALETTE_SIZE> Converter::createDedicatedPalette(Image* img) {
 	std::array<SDL_Color, Constants::PALETTE_SIZE> result;
+	for(int i = 0; i < Constants::PALETTE_SIZE; ++i) {
+		SDL_Color color;
+		color.r = 255;
+		color.g = 255;
+		color.b = 0;
+		color.a = 1;
+		result[i] = color;
+	}
 	return result;
 }
 
@@ -27,15 +35,16 @@ std::vector<std::vector<Constants::oxColor>> Converter::createOxPixelsFromImage(
 
 std::vector<std::vector<SDL_Color>> Converter::createSdlPixelsFromOx(Ox* ox) {
 	std::vector<std::vector<SDL_Color>> pixels;
-	pixels.resize(ox->getWidth()); // init vector
-	for (int i = 0; i < ox->getWidth(); ++i) {
-		pixels[i].resize(ox->getHeight()); // init vector
+	pixels.resize(ox->height); // init vector
+	for (int i = 0; i < ox->width; ++i) {
+		pixels[i].resize(ox->height); // init vector
 	}
-	for (int y = 0; y < ox->getHeight(); ++y) {
-		for (int x = 0; x < ox->getWidth(); ++x) {
+	for (int y = 0; y < ox->height; ++y) {
+		for (int x = 0; x < ox->width; ++x) {
 			pixels[x][y] = oxPixel_to_sdlColor(ox->getPixel(x, y));
 		}
 	}
+	return pixels;
 }
 
 
@@ -69,8 +78,8 @@ Ox Converter::convertImageToOx(Image* image) {
 
 Image Converter::convertOxToImage(Ox* ox) {
 	std::vector<std::vector<SDL_Color>> pixels = createSdlPixelsFromOx(ox);
-	int width = ox->getWidth();
-	int height = ox->getHeight();
+	int width = ox->width;
+	int height = ox->height;
 	return Image(width, height, pixels);
 }
 

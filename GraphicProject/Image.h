@@ -6,8 +6,8 @@
 class Image {
 private:
 	std::string filePath;
-	int width;
-	int height;
+	unsigned int width;
+	unsigned int height;
 	std::vector<std::vector<SDL_Color>> pixelMap;
 	void initVectors(int width, int height);
 public:
