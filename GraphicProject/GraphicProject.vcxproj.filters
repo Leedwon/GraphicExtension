@@ -27,14 +27,14 @@
     <ClCompile Include="BmpFileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Constants.cpp">
+    <ClCompile Include="Ox.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="Converter.cpp">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ox.cpp">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="Constants.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
