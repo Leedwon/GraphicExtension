@@ -126,6 +126,7 @@
     <ClCompile Include="BmpFileReader.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="Converter.cpp" />
+    <ClCompile Include="Header.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Ox.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="BmpFileReader.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Converter.h" />
+    <ClInclude Include="Header.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Ox.h" />
     <ClInclude Include="Utilities.h" />
