@@ -4,16 +4,19 @@
 #include <SDL.h>
 #include "Constants.h"
 
-class Ox
-{
+class Ox {
 private:
-public:
 	int paletteType;
 	int width;
 	int height;
-	std::vector<std::vector<uint8_t>> pixels;
+public:
+	std::vector<std::vector<Constants::oxColor>> pixels;
 	std::array<SDL_Color, Constants::PALETTE_SIZE> colorPalette;
-	SDL_Color getSdlColor(int x, int y);
+	Constants::oxColor getPixel(int x, int y) { return pixels[x][y]; }
+	Ox(int paletteType, int width, int height, std::vector<std::vector<Constants::oxColor>> pixelsVector,
+	   std::array<SDL_Color, Constants::PALETTE_SIZE> paletteArr);
 	Ox();
 	~Ox();
+	int getWidth() const { return width; }
+	int getHeight() const { return height; }
 };

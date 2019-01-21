@@ -1,16 +1,15 @@
 #include "Ox.h"
 
 
-SDL_Color Ox::getSdlColor(int x, int y)
-{
-	return colorPalette[pixels[x][y]];
+Ox::Ox() {
 }
 
-Ox::Ox()
-{
+Ox::Ox(int palType, int w, int h, std::vector<std::vector<Constants::oxColor>> pixelsVector,
+       std::array<SDL_Color, Constants::PALETTE_SIZE> paletteArr) : paletteType(palType), width(w), height(h),
+                                                                    pixels(pixelsVector), colorPalette(paletteArr) {
+
 }
 
 
-Ox::~Ox()
-{
+Ox::~Ox() {
 }
