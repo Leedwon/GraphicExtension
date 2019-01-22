@@ -2,11 +2,15 @@
 #include <string>
 #include "Image.h"
 #include <iostream>
+#include "SurfaceHandler.h"
 
 
 int main(int argc, char *args[]) {
-	SDL_bool done;
+	int height = 960;
+	int width = 1080;
 	SDL_Window *window;
+	SDL_Surface *screenSurface;
+	SurfaceHandler *screenHandler;
 	SDL_Event event;                        // Declare event handle
 	char* dropped_filedir = nullptr;                  // Pointer for directory of dropped file
 	Image *image;
@@ -16,8 +20,8 @@ int main(int argc, char *args[]) {
 		"SDL_DropEvent usage, please drop the file on window",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640,
-		480,
+		width,
+		height,
 		SDL_WINDOW_OPENGL
 	);
 
@@ -28,9 +32,12 @@ int main(int argc, char *args[]) {
 		SDL_Quit();
 		return 1;
 	}
+	screenSurface = SDL_GetWindowSurface(window);
+	screenHandler = new SurfaceHandler(screenSurface);
+	SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0, 0, 0));
+	SDL_UpdateWindowSurface(window);
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
-
-	done = SDL_FALSE;
+	SDL_bool done = SDL_FALSE;
 	while (!done) {                         // Program loop
 		while (!done && SDL_PollEvent(&event)) {
 			switch (event.type) {
@@ -49,7 +56,8 @@ int main(int argc, char *args[]) {
 					dropped_filedir,
 					window
 				);
-				SDL_Renderer *renderer;
+				screenHandler->drawImage(image);
+				SDL_UpdateWindowSurface(window);
 				SDL_free(dropped_filedir);    // Free dropped_filedir memory
 				break;
 			}
