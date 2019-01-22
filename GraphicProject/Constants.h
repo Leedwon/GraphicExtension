@@ -5,8 +5,12 @@ class Constants {
 private:
 	Constants();
 public:
-	typedef uint8_t oxColor; // not sure if store it here or in Ox.h but this is definiately making code cleaner
-	enum PALETTE_TYPES {none, dedicated, grey, imposed }; // when paletteType = none we store each pixel as oxColor 
+	/*
+	 * not sure if store it here or in Ox.h but this is definiately making code cleaner,
+	 * name changed to oxPixel because we don't store colors always sometimes it is index in palette
+	 */
+	typedef uint8_t oxPixel; 
+	enum PALETTE_TYPES {none, dedicated, grey, imposed }; // when paletteType = none we store each pixel as oxPixel 
 	static const int SIGNATURE_SIZE = 2;
 	static const int PALETTE_TYPE_BYTE_SHIFT = 3;
 	static const int PALETTE_SIZE = 64;

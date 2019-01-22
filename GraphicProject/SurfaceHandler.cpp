@@ -1,5 +1,5 @@
 #include "SurfaceHandler.h"
-
+#include <iostream>
 
 
 SDL_Color SurfaceHandler::getPixel(const int& x, const int& y) {
@@ -23,8 +23,7 @@ void SurfaceHandler::setPixel(const int& x, const int& y, const SDL_Color& color
 	Uint8 *pixAddress = getPixelAddress(x, y);
 	Uint32 newPix = SDL_MapRGB(surface->format, color.r, color.g, color.b);
 	int bytesPerPixel = surface->format->BytesPerPixel;
-	switch (bytesPerPixel)
-	{
+	switch (bytesPerPixel) {
 	case 1: //8-bit
 		*pixAddress = newPix;
 		break;
@@ -55,8 +54,7 @@ void SurfaceHandler::setPixel(const int& x, const int& y, int r, int g, int b) {
 	Uint8 *pixAddress = getPixelAddress(x, y);
 	Uint32 newPix = SDL_MapRGB(surface->format, r, g, b);
 	int bytesPerPixel = surface->format->BytesPerPixel;
-	switch (bytesPerPixel)
-	{
+	switch (bytesPerPixel) {
 	case 1: //8-bit
 		*pixAddress = newPix;
 		break;
@@ -87,7 +85,7 @@ void SurfaceHandler::drawImage(Image *image) {
 	if (image->getWidth() > surface->w || image->getHeight() > surface->h)
 		throw TOO_SMALL_SURFACE_EXCEPTION;
 	for(int height = 0; height < image->getHeight(); ++height) {
-		for(int width = 0; width < image->getWidth(); ++width)
+		for (int width = 0; width < image->getWidth(); ++width) 
 			setPixel(width, height, image->getPixel(width, height));
 	}		
 }

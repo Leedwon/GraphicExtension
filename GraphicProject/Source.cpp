@@ -3,6 +3,9 @@
 #include "Image.h"
 #include <iostream>
 #include "SurfaceHandler.h"
+#include "Compressor.h"
+#include "Ox.h"
+#include "Converter.h"
 
 
 int main(int argc, char *args[]) {
@@ -58,6 +61,8 @@ int main(int argc, char *args[]) {
 				);
 				screenHandler->drawImage(image);
 				SDL_UpdateWindowSurface(window);
+				Ox ox = Converter::convertImageToOx(image);
+				std::vector<uint8_t> compressed = Compressor::compressRle(ox.getPixelsVector());
 				SDL_free(dropped_filedir);    // Free dropped_filedir memory
 				break;
 			}
