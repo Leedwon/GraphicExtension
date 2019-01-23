@@ -7,6 +7,7 @@ class Compressor {
 private:
 	static void addSequenceOfDifferentSymbols(std::vector<uint8_t> &buffer, std::vector<uint8_t> &destination);
 	static void addSequenceOfSameSymbols(std::vector<uint8_t> &destination, const uint8_t &symbol, const uint8_t &numberOfSymbols);
+	static void addSequenceOfDifferentSymbolsByterun(std::vector<uint8_t> &buffer, std::vector<uint8_t> &destination, const uint8_t number_of_symbols);
 	static bool areThreeInRowSame(const std::vector<std::vector<Constants::oxPixel>> &pixels, int x, int y);
 public:
 	//determines which compression is better and compress
