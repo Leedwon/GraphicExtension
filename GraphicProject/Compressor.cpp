@@ -2,7 +2,7 @@
 
 
 bool Compressor::areThreeInRowSame(const std::vector<std::vector<Constants::oxPixel>>& pixels, int x, int y) {
-	if (y >= pixels.size() - 1 && x >= pixels[y].size() - 3) // we can't take three pixels - outOfBounds
+	if (y >= pixels.size() - 1 && x >= pixels[y].size() - 2) // we can't take three pixels - outOfBounds
 		return false;
 	Constants::oxPixel previous = pixels[y][x];
 	int index = x;
