@@ -2,8 +2,8 @@
 #include <SDL.h>
 #include <cstring>
 #include "Image.h"
-
-class Image;
+#include "Ox.h"
+#include "Converter.h"
 
 class SurfaceHandler
 {
@@ -19,7 +19,8 @@ public:
 	/* for this function to show results SDL_UpdateWindowSurface(window) must be called after
 	 * Image *image is passed as pointer param because there is no copy ctor in Image class TODO :: <--- but we wont have time most likely
 	 */
-	void drawImage(Image *image); 
+	void drawImage(Image *image, int startingX, int startingY);
+	void drawOx(Ox *ox, int startingX, int startingY);
 	SurfaceHandler(SDL_Surface *surf) : surface(surf) {}
 	~SurfaceHandler();
 };
