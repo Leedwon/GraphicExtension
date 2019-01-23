@@ -234,3 +234,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+GraphicProjectTest/GraphicProjectTest.vcxproj.filters
+GraphicProjectTest/GraphicProjectTest.vcxproj
+GraphicProjectTest/packages.config
+GraphicProjectTest/Źródło.cpp
