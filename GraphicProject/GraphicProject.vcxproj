@@ -123,10 +123,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BmpFileReader.cpp" />
+    <ClCompile Include="Compressor.cpp" />
+    <ClCompile Include="Constants.cpp" />
+    <ClCompile Include="Converter.cpp" />
+    <ClCompile Include="Header.cpp" />
+    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="Ox.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="SurfaceHandler.cpp" />
+    <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BmpFileReader.h" />
+    <ClInclude Include="Compressor.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="Converter.h" />
+    <ClInclude Include="Header.h" />
+    <ClInclude Include="Image.h" />
+    <ClInclude Include="Ox.h" />
+    <ClInclude Include="SurfaceHandler.h" />
+    <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
