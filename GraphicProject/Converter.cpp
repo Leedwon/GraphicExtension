@@ -49,19 +49,19 @@ std::vector<std::vector<SDL_Color>> Converter::createSdlPixelsFromOx(Ox* ox) {
 
 uint8_t Converter::sdlColorToOxPixel(SDL_Color color) {
 	uint8_t oxColor = 0;
-	oxColor |= (color.r & Constants::MASK_FIRST_3_BITS) << 5;
-	oxColor |= (color.g & Constants::MASK_FIRST_3_BITS) << 2;
-	oxColor |= (color.b & Constants::MASK_FIRST_2_BITS);
+	oxColor |= (color.r & Constants::MASK_FIRST_3_BITS);
+	oxColor |= (color.g & Constants::MASK_FIRST_3_BITS) >> 3;
+	oxColor |= (color.b & Constants::MASK_FIRST_2_BITS) >> 6;
 	return oxColor;
 }
 
 
 SDL_Color Converter::oxPixelToSdlColor(Constants::oxPixel oxColor) {
 	SDL_Color color;
-	color.r = oxColor & Constants::MASK_BITS_RED;
-	color.g = oxColor & Constants::MASK_BITS_GREEN;
-	color.b = oxColor & Constants::MASK_BITS_BLUE;
-	color.a = 1;
+	color.r = (oxColor & Constants::MASK_BITS_RED);
+	color.g = (oxColor & Constants::MASK_BITS_GREEN) << 3;
+	color.b = (oxColor & Constants::MASK_BITS_BLUE) << 6;
+	color.a = 255;
 	return color;
 }
 

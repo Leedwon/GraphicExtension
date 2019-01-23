@@ -59,9 +59,10 @@ int main(int argc, char *args[]) {
 					dropped_filedir,
 					window
 				);
-				screenHandler->drawImage(image);
-				SDL_UpdateWindowSurface(window);
+				screenHandler->drawImage(image, 0, 0);
 				Ox ox = Converter::convertImageToOx(image);
+				screenHandler->drawOx(&ox, image->getWidth(), image->getHeight());
+				SDL_UpdateWindowSurface(window);
 				std::vector<uint8_t> compressed = Compressor::compressRle(ox.getPixelsVector());
 				SDL_free(dropped_filedir);    // Free dropped_filedir memory
 				break;
