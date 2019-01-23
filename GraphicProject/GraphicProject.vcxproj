@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BmpFileReader.cpp" />
+    <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="Converter.cpp" />
     <ClCompile Include="Header.cpp" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BmpFileReader.h" />
+    <ClInclude Include="Compressor.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Converter.h" />
     <ClInclude Include="Header.h" />

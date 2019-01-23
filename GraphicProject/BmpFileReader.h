@@ -17,4 +17,3 @@ public:
 	int getWidth() const { return surface->w; } 
 	int getHeight() const { return surface->h; }
 };
-
