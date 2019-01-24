@@ -36,3 +36,11 @@ bool operator!=(const SDL_Color& l, const SDL_Color& r) {
 	}
 	return false;
 }
+
+void renderText(SDL_Renderer *renderer, std::string text, TTF_Font *font, SDL_Rect *background, SDL_Color textColor) {
+	SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
+	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+	SDL_FreeSurface(textSurface);
+	SDL_RenderCopy(renderer, textTexture, NULL, background);
+	SDL_RenderPresent(renderer);
+}
