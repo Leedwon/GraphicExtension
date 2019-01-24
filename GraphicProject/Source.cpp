@@ -10,18 +10,20 @@
 #include "Utilities.h"
 #include "MainMenu.h"
 #include "PaletteMenu.h"
+#include "ImageInfosMenu.h"
+#include <allocators>
 
 int main(int argc, char* args[]) {
-	int height = 960;
-	int width = 1080;
 	SDL_Window* window;
+	SDL_Surface* bmpSurface = nullptr;
 	SDL_Surface* screenSurface;
 	SurfaceHandler* screenHandler;
+	SDL_Texture *tx = nullptr;
 	SDL_Event event; // Declare event handle
 	char* dropped_filedir = nullptr; // Pointer for directory of dropped file
-	Image* image;
+	Image* image = nullptr;
 	Constants::paletteType palette;
-	Constants::menuState menuState = Constants::mainMenu;
+	Constants::menuState menuState = Constants::dropFileState;
 	bool fileDropped = false;
 	SDL_Init(SDL_INIT_VIDEO); // SDL2 initialization
 	TTF_Init();
@@ -29,8 +31,8 @@ int main(int argc, char* args[]) {
 		Constants::APP_NAME.c_str(),
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		width,
-		height,
+		Constants::WIDTH,
+		Constants::HEIGHT,
 		SDL_WINDOW_OPENGL
 	);
 
@@ -57,7 +59,9 @@ int main(int argc, char* args[]) {
 	SDL_bool test = SDL_FALSE;
 	MainMenu mainMenu;
 	PaletteMenu paletteMenu;
-	mainMenu.draw(renderer, font);
+	ImageInfosMenu *imageInfosMenu = nullptr;
+	SDL_Rect textPlace{ Constants::WIDTH / 2 - 240, 0, 480, 120 };
+	renderText(renderer, "Please drag and drop file that you want to work on", font, &textPlace, Constants::TEXT_COLOR);
 
 	while (!done) {
 		// Program loop
@@ -72,31 +76,62 @@ int main(int argc, char* args[]) {
 			case (SDL_DROPFILE):
 				dropped_filedir = event.drop.file;
 				image = new Image(dropped_filedir);
+				bmpSurface = SDL_LoadBMP(dropped_filedir);
+				tx = SDL_CreateTextureFromSurface(renderer, bmpSurface);
+				SDL_FreeSurface(bmpSurface);
+				imageInfosMenu = new ImageInfosMenu(*image);
 				// TODO:: do some things with iamge
 				SDL_free(dropped_filedir); // Free dropped_filedir memory
 				fileDropped = true;
+				SDL_RenderClear(renderer);
+				mainMenu.draw(renderer, font);
+				// when file loaded navigate to main menu
+				menuState = Constants::mainMenu;
 				break;
 			case (SDL_MOUSEBUTTONDOWN):
 				switch (menuState) {
 				case(Constants::mainMenu):
-					if (mainMenu.buttonPaletteMenu.checkForPress(&event)) {
+					if (mainMenu.checkForPresses(&event)) {
+						menuState = mainMenu.getMenuState();
 						//when pressed
 						SDL_RenderClear(renderer);
-						paletteMenu.draw(renderer, font);
-						paletteMenu.enableAllButtons();
+						if (menuState == Constants::paletteMenu) { 
+							// navigation to paletteMenu
+							paletteMenu.draw(renderer, font);
+							paletteMenu.enableAllButtons();
+						} else if (menuState == Constants::fileInfosMenu) {
+							// navigation to fileInfosMenu
+							SDL_Rect bmpRect = { Constants::WIDTH / 2 , Constants::HEIGHT / 2, image->getWidth(), image->getHeight() };
+							SDL_RenderCopy(renderer, tx, NULL, &bmpRect);
+							SDL_RenderPresent(renderer);
+							//screenHandler->drawImage(image, Constants::WIDTH / 2 - image->getWidth() / 2, Constants::HEIGHT / 2 - image->getHeight() / 2);
+							//SDL_UpdateWindowSurface(window);
+							imageInfosMenu->draw(renderer, font);
+							imageInfosMenu->backButton.enabled = true;
+							
+						}
 						mainMenu.disableMenu();
-						menuState = Constants::paletteMenu;
+						
 					}
-
 					break;
 				case(Constants::paletteMenu):
 					if (paletteMenu.checkForPresses(&event)) {
-						// when any pressed 
+						// when any pressed get palette and navigation to main menu
 						palette = paletteMenu.getPressedPalette();
 						SDL_RenderClear(renderer);
 						mainMenu.draw(renderer, font);
-						mainMenu.buttonPaletteMenu.enabled = true;
+						mainMenu.enableAllButtons();
 						paletteMenu.disableMenu();
+						menuState = Constants::mainMenu;
+					}
+					break;
+				case(Constants::fileInfosMenu):
+					if(imageInfosMenu->backButton.checkForPress(&event)) {
+						SDL_RenderClear(renderer);
+						// navigation to main menu
+						imageInfosMenu->backButton.enabled = false;
+						mainMenu.enableAllButtons();
+						mainMenu.draw(renderer, font);
 						menuState = Constants::mainMenu;
 					}
 					break;

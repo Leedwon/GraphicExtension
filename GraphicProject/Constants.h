@@ -13,12 +13,12 @@ public:
 	 */
 	typedef uint8_t oxPixel; 
 	enum paletteType {none, dedicated, grey, imposed }; // when paletteType = none we store each pixel as oxPixel 
-	enum menuState {mainMenu, paletteMenu};
+	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu};
 	static const int PADDING = 24;
-	static const int BUTTON_WIDTH = 150;
-	static const int BUTTON_HEIGHT = 50;
-	static const int WIDTH = 960;
-	static const int HEIGHT = 1080;
+	static const int BUTTON_WIDTH = 480;
+	static const int BUTTON_HEIGHT = 120;
+	static const int WIDTH = 1080;
+	static const int HEIGHT = 960;
 	static const SDL_Color BUTTON_BACKGROUND;
 	static const SDL_Color BUTTON_FRAME;
 	static const SDL_Color TEXT_COLOR;
@@ -28,6 +28,8 @@ public:
 	static const std::string BUTTON_PALETTE_IMPOSED;
 	static const std::string BUTTON_PALETTE_DEDICATED;
 	static const std::string BUTTON_PALETTE_GREY;
+	static const std::string BUTTON_FILE_INFOS;
+	static const std::string BUTTON_BACK;
 	static const std::string APP_NAME;
 
 

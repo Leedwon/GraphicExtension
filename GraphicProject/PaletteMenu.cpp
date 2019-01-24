@@ -24,9 +24,7 @@ bool PaletteMenu::checkForPresses(SDL_Event* event) {
 }
 
 bool PaletteMenu::isAnyButtonPressed() {
-	if (buttonNonePalette.pressed || buttonDedicatedPalette.pressed || buttonGreyPalette.pressed || buttonImposedPalette.pressed)
-		return true;
-	return false;
+	return (buttonNonePalette.pressed || buttonDedicatedPalette.pressed || buttonGreyPalette.pressed || buttonImposedPalette.pressed);
 }
 
 void PaletteMenu::draw(SDL_Renderer* renderer, TTF_Font* font) {
@@ -64,12 +62,12 @@ void PaletteMenu::disableMenu() {
 }
 
 PaletteMenu::PaletteMenu() :
-	buttonNonePalette(0, 0, Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT, Constants::BUTTON_PALETTE_NONE),
-	buttonDedicatedPalette(0, Constants::BUTTON_HEIGHT+ Constants::PADDING, Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT,
+	buttonNonePalette(Constants::WIDTH/2 - Constants::BUTTON_WIDTH / 2, 0, Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT, Constants::BUTTON_PALETTE_NONE),
+	buttonDedicatedPalette(Constants::WIDTH / 2 - Constants::BUTTON_WIDTH / 2, Constants::BUTTON_HEIGHT, Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT,
 	                       Constants::BUTTON_PALETTE_DEDICATED),
-	buttonGreyPalette(0, Constants::BUTTON_HEIGHT * 2 + Constants::PADDING * 2, Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT,
+	buttonGreyPalette(Constants::WIDTH / 2 - Constants::BUTTON_WIDTH / 2, Constants::BUTTON_HEIGHT * 2, Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT,
 	                  Constants::BUTTON_PALETTE_GREY),
-	buttonImposedPalette(0, Constants::BUTTON_HEIGHT * 3 + Constants::PADDING * 3, Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT,
+	buttonImposedPalette(Constants::WIDTH / 2 - Constants::BUTTON_WIDTH / 2, Constants::BUTTON_HEIGHT * 3, Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT,
 	                     Constants::BUTTON_PALETTE_IMPOSED) {
 
 }

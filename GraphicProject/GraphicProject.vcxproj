@@ -76,6 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); _SILENCE_STDEXT_ALLOCATORS_DEPRECATION_WARNING</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -87,6 +88,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); _SILENCE_STDEXT_ALLOCATORS_DEPRECATION_WARNING</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -100,6 +102,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); _SILENCE_STDEXT_ALLOCATORS_DEPRECATION_WARNING</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -115,6 +118,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); _SILENCE_STDEXT_ALLOCATORS_DEPRECATION_WARNING</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -131,6 +135,7 @@
     <ClCompile Include="Decompressor.cpp" />
     <ClCompile Include="Header.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="ImageInfosMenu.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Ox.cpp" />
     <ClCompile Include="PaletteMenu.cpp" />
@@ -150,6 +155,7 @@
     <ClInclude Include="Decompressor.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="ImageInfosMenu.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Ox.h" />
     <ClInclude Include="PaletteMenu.h" />
