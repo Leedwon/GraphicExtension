@@ -23,7 +23,7 @@ std::vector<uint8_t> Decompressor::decompressRLE(const std::vector<uint8_t> &com
 				decompressedPixelData.push_back(compressedPixelData[posInVector]);
 			}
 
-			++posInVector;
+			++posInVector; //Advance to next data chunk
 		}
 
 		//Repeat sequence
@@ -37,7 +37,7 @@ std::vector<uint8_t> Decompressor::decompressRLE(const std::vector<uint8_t> &com
 				decompressedPixelData.push_back(compressedPixelData[posInVector]);
 			}
 
-			++posInVector;
+			++posInVector; //Advance to next data chunk
 		}
 	}
 
@@ -66,7 +66,7 @@ std::vector<uint8_t> Decompressor::decopressByteRun(const std::vector<uint8_t> &
 				decompressedPixelData.push_back(compressedPixelData[posInVector]);
 			}
 
-			++posInVector;
+			++posInVector; //Advance to next data chunk
 		}
 
 		//Repeat sequence
@@ -80,7 +80,7 @@ std::vector<uint8_t> Decompressor::decopressByteRun(const std::vector<uint8_t> &
 				decompressedPixelData.push_back(compressedPixelData[posInVector]);
 			}
 
-			++posInVector;
+			++posInVector; //Advance to next data chunk
 		}
 	}
 

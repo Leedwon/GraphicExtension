@@ -9,7 +9,6 @@ class Decompressor
 
 		static std::vector<uint8_t> decompressRLE(const std::vector<uint8_t> &compressedPixelData);
 		static std::vector<uint8_t> decopressByteRun(const std::vector<uint8_t> &compressedPixelData);
-
 		Decompressor();
 		~Decompressor();
 };
