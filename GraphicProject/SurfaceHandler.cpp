@@ -1,5 +1,5 @@
 #include "SurfaceHandler.h"
-#include <iostream>
+
 
 
 SDL_Color SurfaceHandler::getPixel(const int& x, const int& y) {
@@ -81,13 +81,26 @@ void SurfaceHandler::setPixel(const int& x, const int& y, int r, int g, int b) {
 	}
 }
 
-void SurfaceHandler::drawImage(Image *image) {
-	if (image->getWidth() > surface->w || image->getHeight() > surface->h)
+void SurfaceHandler::drawImage(Image *image, int startingX, int startingY) {
+	if (image->getWidth() + startingX > surface->w || image->getHeight() + startingY > surface->h)
 		throw TOO_SMALL_SURFACE_EXCEPTION;
 	for(int height = 0; height < image->getHeight(); ++height) {
 		for (int width = 0; width < image->getWidth(); ++width) 
-			setPixel(width, height, image->getPixel(width, height));
+			setPixel(width + startingX, height + startingY, image->getPixel(width, height));
 	}		
+}
+
+void SurfaceHandler::drawOx(Ox* ox, int startingX, int startingY) {
+	if (ox->width + startingX > surface->w || ox->height + startingY > surface->h)
+		throw TOO_SMALL_SURFACE_EXCEPTION;
+	for (int height = 0; height < ox->height; ++height) {
+		for (int width = 0; width < ox->width; ++width) {
+			Constants::oxPixel pixel = ox->getPixel(width, height);
+			SDL_Color sdlFromOx;
+			sdlFromOx = Converter::oxPixelToSdlColor(pixel);
+			setPixel(width + startingX, height + startingY, sdlFromOx);
+		}
+	}
 }
 
 SurfaceHandler::~SurfaceHandler() {
