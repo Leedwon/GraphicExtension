@@ -13,5 +13,7 @@ public:
 	static SDL_Color oxPixelToSdlColor(Constants::oxPixel oxColor);
 	static Ox convertImageToOx(Image* image);
 	static Image convertOxToImage(Ox* ox);
+	static void biggest_color_range(std::vector<SDL_Color> &allPixels, int begin, int end);
+	static void sort_by_color(std::vector<SDL_Color> &allPixels, int begin, int end, int which_sort);
 	~Converter();
 };
