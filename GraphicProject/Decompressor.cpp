@@ -1,13 +1,10 @@
 #include "Decompressor.h"
 
-Ox Decompressor::decompressRLE(const std::vector<uint8_t> &compressedPixelData)
+std::vector<uint8_t> Decompressor::decompressRLE(const std::vector<uint8_t> &compressedPixelData)
 {
-	Ox imageData;
+	std::vector<uint8_t> decompressedPixelData;
 	int numToRepeat;
 	int numToCopy;
-
-	int row = 0;
-	int col = 0;
 
 	int posInVector = 0;
 
@@ -21,26 +18,12 @@ Ox Decompressor::decompressRLE(const std::vector<uint8_t> &compressedPixelData)
 
 			for (int i = 0; i < numToCopy; ++i)
 			{
-				if (col < imageData.width)
-				{
-					++posInVector;
+				++posInVector; //Each time advance to next position to get value to copy
 
-					imageData.pixels[row][col] = compressedPixelData[posInVector];
-					++col;
-				}
-				else //If col index is greater than width of image advance to next row
-				{
-					++row;
-					col = 0;
-
-					++posInVector;
-
-					imageData.pixels[row][col] = compressedPixelData[posInVector];
-					++col;
-				}
+				decompressedPixelData.push_back(compressedPixelData[posInVector]);
 			}
 
-			++posInVector;
+			++posInVector; //Advance to next data chunk
 		}
 
 		//Repeat sequence
@@ -51,36 +34,21 @@ Ox Decompressor::decompressRLE(const std::vector<uint8_t> &compressedPixelData)
 
 			for (int i = 0; i < numToRepeat; ++i)
 			{
-				if (col < imageData.width)
-				{
-					imageData.pixels[row][col] = compressedPixelData[posInVector];
-					++col;
-				}
-				else //If col index is greater than width of image advance to next row
-				{
-					++row;
-					col = 0;
-
-					imageData.pixels[row][col] = compressedPixelData[posInVector];
-					++col;
-				}
+				decompressedPixelData.push_back(compressedPixelData[posInVector]);
 			}
 
-			++posInVector;
+			++posInVector; //Advance to next data chunk
 		}
 	}
 
-	return imageData;
+	return decompressedPixelData;
 }
 
-Ox Decompressor::decopressByteRun(const std::vector<uint8_t> &compressedPixelData)
+std::vector<uint8_t> Decompressor::decopressByteRun(const std::vector<uint8_t> &compressedPixelData)
 {
-	Ox imageData;
+	std::vector<uint8_t> decompressedPixelData;
 	int numToCopy;
 	int numToRepeat;
-
-	int row = 0;
-	int col = 0;
 
 	int posInVector = 0;
 
@@ -93,26 +61,12 @@ Ox Decompressor::decopressByteRun(const std::vector<uint8_t> &compressedPixelDat
 
 			for (int i = 0; i < numToCopy; ++i)
 			{
-				if (col < imageData.width)
-				{
-					++posInVector;
+				++posInVector; //Each time advance to next position to get value to copy
 
-					imageData.pixels[row][col] = compressedPixelData[posInVector];
-					++col;
-				}
-				else //If col index is greater than width of image advance to next row
-				{
-					++row;
-					col = 0;
-
-					++posInVector;
-
-					imageData.pixels[row][col] = compressedPixelData[posInVector];
-					++col;
-				}
+				decompressedPixelData.push_back(compressedPixelData[posInVector]);
 			}
 
-			++posInVector;
+			++posInVector; //Advance to next data chunk
 		}
 
 		//Repeat sequence
@@ -123,24 +77,12 @@ Ox Decompressor::decopressByteRun(const std::vector<uint8_t> &compressedPixelDat
 
 			for (int i = 0; i < numToRepeat; ++i)
 			{
-				if (col < imageData.width)
-				{
-					imageData.pixels[row][col] = compressedPixelData[posInVector];
-					++col;
-				}
-				else //If col index is greater than width of image advance to next row
-				{
-					++row;
-					col = 0;
-
-					imageData.pixels[row][col] = compressedPixelData[posInVector];
-					++col;
-				}
+				decompressedPixelData.push_back(compressedPixelData[posInVector]);
 			}
 
-			++posInVector;
+			++posInVector; //Advance to next data chunk
 		}
 	}
 
-	return imageData;
+	return decompressedPixelData;
 }

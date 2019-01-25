@@ -4,7 +4,6 @@
 #include "SurfaceHandler.h"
 
 
-// is this class even necessary?
 class BmpFileReader {
 private:
 	std::string filePath;
