@@ -7,22 +7,23 @@ class Constants {
 private:
 	Constants();
 public:
-	/*
-	 * not sure if store it here or in Ox.h but this is definiately making code cleaner,
-	 * name changed to oxPixel because we don't store colors always sometimes it is index in palette
-	 */
 	typedef uint8_t oxPixel; 
-	enum paletteType {none, dedicated, grey, imposed }; // when paletteType = none we store each pixel as oxPixel 
+	enum paletteType { none, dedicated, grey, imposed };
 	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, showImagesMenu};
+
+    /*dimension consts*/
 	static const int PADDING = 24;
 	static const int BUTTON_WIDTH = 480;
 	static const int BUTTON_HEIGHT = 120;
 	static const int WIDTH = 1080;
 	static const int HEIGHT = 960;
+
+	/*colors for buttons*/
 	static const SDL_Color BUTTON_BACKGROUND;
 	static const SDL_Color BUTTON_FRAME;
 	static const SDL_Color TEXT_COLOR;
-	/*strings for buttons should be in spearated file*/
+
+	/*strings for buttons names*/
 	static const std::string BUTTON_PALETTE_MENU;
 	static const std::string BUTTON_PALETTE_NONE;
 	static const std::string BUTTON_PALETTE_IMPOSED;
@@ -32,7 +33,6 @@ public:
 	static const std::string BUTTON_SHOW_IMAGES;
 	static const std::string BUTTON_BACK;
 	static const std::string APP_NAME;
-
 
 	static const int SIGNATURE_SIZE = 2;
 	static const int PALETTE_TYPE_BYTE_SHIFT = 3;
