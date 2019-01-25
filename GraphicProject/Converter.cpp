@@ -46,9 +46,6 @@ void Converter::sort_by_color(std::vector<SDL_Color> &allPixels, int begin, int 
 
 }
 
-
-
-
 void Converter::biggest_color_range(std::vector<SDL_Color> &allPixels, int begin, int end) {
 
 	
@@ -108,8 +105,6 @@ void Converter::biggest_color_range(std::vector<SDL_Color> &allPixels, int begin
 
 }
 
-
-// just temporary solution pallete should be created based on image TODO :: 
 std::array<SDL_Color, Constants::PALETTE_SIZE> Converter::createDedicatedPalette(Image* img) {
 
 	std::array<SDL_Color, Constants::PALETTE_SIZE> palette;
@@ -214,7 +209,6 @@ uint8_t Converter::sdlColorToOxPixel(SDL_Color color) {
 	oxColor |= (color.b & Constants::MASK_FIRST_2_BITS) >> 6;
 	return oxColor;
 }
-
 
 SDL_Color Converter::oxPixelToSdlColor(Constants::oxPixel oxColor) {
 	SDL_Color color;

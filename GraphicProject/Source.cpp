@@ -23,6 +23,7 @@ int main(int argc, char* args[]) {
 	char* dropped_filedir = nullptr; // Pointer for directory of dropped file
 	Image* image = nullptr;
 	Constants::paletteType palette;
+	Ox *ox = nullptr;
 	Constants::menuState menuState = Constants::dropFileState;
 	bool fileDropped = false;
 	SDL_Init(SDL_INIT_VIDEO); // SDL2 initialization
@@ -62,11 +63,12 @@ int main(int argc, char* args[]) {
 	ImageInfosMenu *imageInfosMenu = nullptr;
 	SDL_Rect textPlace{ Constants::WIDTH / 2 - 240, 0, 480, 120 };
 	renderText(renderer, "Please drag and drop file that you want to work on", font, &textPlace, Constants::TEXT_COLOR);
+	textPlace.y += Constants::BUTTON_WIDTH;
+	renderText(renderer, "Loading file can take a while, sorry", font, &textPlace, Constants::TEXT_COLOR);
 
 	while (!done) {
 		// Program loop
 		while (!done && SDL_PollEvent(&event)) {
-
 			switch (event.type) {
 			case (SDL_QUIT):
 				// In case of exit
@@ -76,6 +78,8 @@ int main(int argc, char* args[]) {
 			case (SDL_DROPFILE):
 				dropped_filedir = event.drop.file;
 				image = new Image(dropped_filedir);
+				ox = new Ox(Converter::convertImageToOx(image));
+				ox->setDedicatedPalette(image);
 				bmpSurface = SDL_LoadBMP(dropped_filedir);
 				tx = SDL_CreateTextureFromSurface(renderer, bmpSurface);
 				SDL_FreeSurface(bmpSurface);
@@ -85,6 +89,7 @@ int main(int argc, char* args[]) {
 				fileDropped = true;
 				SDL_RenderClear(renderer);
 				mainMenu.draw(renderer, font);
+				mainMenu.enableAllButtons();
 				// when file loaded navigate to main menu
 				menuState = Constants::mainMenu;
 				break;
@@ -95,7 +100,7 @@ int main(int argc, char* args[]) {
 						menuState = mainMenu.getMenuState();
 						//when pressed
 						SDL_RenderClear(renderer);
-						if (menuState == Constants::paletteMenu) { 
+						if (menuState == Constants::paletteMenu) {
 							// navigation to paletteMenu
 							paletteMenu.draw(renderer, font);
 							paletteMenu.enableAllButtons();
@@ -104,14 +109,19 @@ int main(int argc, char* args[]) {
 							SDL_Rect bmpRect = { Constants::WIDTH / 2 , Constants::HEIGHT / 2, image->getWidth(), image->getHeight() };
 							SDL_RenderCopy(renderer, tx, NULL, &bmpRect);
 							SDL_RenderPresent(renderer);
-							//screenHandler->drawImage(image, Constants::WIDTH / 2 - image->getWidth() / 2, Constants::HEIGHT / 2 - image->getHeight() / 2);
-							//SDL_UpdateWindowSurface(window);
 							imageInfosMenu->draw(renderer, font);
 							imageInfosMenu->backButton.enabled = true;
-							
+
+						} else if (menuState == Constants::showImagesMenu) {
+							SDL_RenderClear(renderer);
+							mainMenu.disableMenu();
+							screenHandler->drawImage(image, 0, 0);
+							screenHandler->drawOxFromPalette(ox, ox->width, 0);
+							screenHandler->drawOx(ox, ox->width, ox->height);
+							SDL_UpdateWindowSurface(window);
 						}
 						mainMenu.disableMenu();
-						
+
 					}
 					break;
 				case(Constants::paletteMenu):
@@ -126,7 +136,7 @@ int main(int argc, char* args[]) {
 					}
 					break;
 				case(Constants::fileInfosMenu):
-					if(imageInfosMenu->backButton.checkForPress(&event)) {
+					if (imageInfosMenu->backButton.checkForPress(&event)) {
 						SDL_RenderClear(renderer);
 						// navigation to main menu
 						imageInfosMenu->backButton.enabled = false;
@@ -136,6 +146,16 @@ int main(int argc, char* args[]) {
 					}
 					break;
 				}
+			case (SDL_KEYDOWN):
+				if(menuState == Constants::showImagesMenu) {
+					if (event.key.keysym.sym == SDLK_ESCAPE) {
+						SDL_RenderClear(renderer);
+						mainMenu.enableAllButtons();
+						mainMenu.draw(renderer, font);
+						menuState = Constants::mainMenu;
+					}
+				}
+				break;
 			}
 		}
 	}

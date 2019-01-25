@@ -44,3 +44,7 @@ void renderText(SDL_Renderer *renderer, std::string text, TTF_Font *font, SDL_Re
 	SDL_RenderCopy(renderer, textTexture, NULL, background);
 	SDL_RenderPresent(renderer);
 }
+
+int distanceBetweenColors(const SDL_Color& imageColor, const SDL_Color& paletteColor) {
+	return (pow(imageColor.r - paletteColor.r, 2) + pow(imageColor.g - paletteColor.g, 2) + pow(imageColor.b - paletteColor.b, 2));
+}

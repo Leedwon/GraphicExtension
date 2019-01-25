@@ -103,6 +103,18 @@ void SurfaceHandler::drawOx(Ox* ox, int startingX, int startingY) {
 	}
 }
 
+void SurfaceHandler::drawOxFromPalette(Ox* ox, int startingX, int startingY) {
+	if(ox->paletteType != Constants::none) {
+		if (ox->width + startingX > surface->w || ox->height + startingY > surface->h)
+			throw TOO_SMALL_SURFACE_EXCEPTION;
+		for (int height = 0; height < ox->height; ++height) {
+			for (int width = 0; width < ox->width; ++width) {
+				setPixel(width + startingX, height + startingY, ox->getPixelFromPalette(width,height));
+			}
+		}
+	}
+}
+
 SurfaceHandler::~SurfaceHandler() {
 	SDL_free(surface);
 }
