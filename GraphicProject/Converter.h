@@ -11,6 +11,8 @@ private:
 	static void sort_by_color(std::vector<SDL_Color> &allPixels, int begin, int end, int which_sort);
 public:
 	static std::array<SDL_Color, Constants::PALETTE_SIZE> createDedicatedPalette(Image* img);
+	// with oxPixel we get 256 shades of grey
+	static std::vector<std::vector<Constants::oxPixel>> getBlackWhitePixels(Image *img);
 	static Constants::oxPixel sdlColorToOxPixel(SDL_Color color);
 	static SDL_Color oxPixelToSdlColor(Constants::oxPixel oxColor);
 	static Ox convertImageToOx(Image* image);
