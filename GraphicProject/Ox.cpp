@@ -7,6 +7,7 @@ Ox::Ox() {
 }
 
 void Ox::setDedicatedPalette(Image *img) {
+	colorPalette = Converter::createDedicatedPalette(img);
 	paletteType = Constants::dedicated;
 	paletteIndexes.resize(height);
 	for(int i = 0; i < height; ++i) {
@@ -29,7 +30,7 @@ void Ox::setDedicatedPalette(Image *img) {
 	}
 }
 
-Ox::Ox(int palType, int w, int h, std::vector<std::vector<Constants::oxPixel>> pixelsVector,
+Ox::Ox(Constants::paletteType palType, int w, int h, std::vector<std::vector<Constants::oxPixel>> pixelsVector,
        std::array<SDL_Color, Constants::PALETTE_SIZE> paletteArr) : paletteType(palType), width(w), height(h),
                                                                     pixels(pixelsVector), colorPalette(paletteArr) {
 }
