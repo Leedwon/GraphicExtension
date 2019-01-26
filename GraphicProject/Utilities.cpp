@@ -66,6 +66,7 @@ std::vector<std::vector<uint8_t>> ditheringGreyScale(const std::vector<std::vect
 		//Two additional columns because error is always distributed to the next and previous column
 	}
 
+	//Initialize all error values to 0
 	for (int i = 0; i < height + 1; ++i)
 	{
 		for (int j = 0; j < width + 2; ++j)
