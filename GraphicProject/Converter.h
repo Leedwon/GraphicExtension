@@ -15,7 +15,9 @@ public:
 	static std::vector<std::vector<Constants::oxPixel>> createGreyScalePixels(Image *img);
 	static Constants::oxPixel sdlColorToOxPixel(SDL_Color color);
 	static SDL_Color oxPixelToSdlColor(Constants::oxPixel oxColor);
-	static Ox convertImageToOx(Image* image);
+	static Ox convertImageToOxRawColors(Image* image);
+	static Ox convertImageToOxDedicatedPalette(Image *image);
+	static Ox convertImageToOxGreyScale(Image *image);
 	static Image convertOxToImage(Ox* ox);
 	~Converter();
 };

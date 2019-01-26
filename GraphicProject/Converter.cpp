@@ -236,11 +236,30 @@ SDL_Color Converter::oxPixelToSdlColor(Constants::oxPixel oxColor) {
 }
 
 
-Ox Converter::convertImageToOx(Image* image) {
+
+Ox Converter::convertImageToOxRawColors(Image* image) {
 	int width = image->getWidth();
 	int height = image->getHeight();
 	Constants::paletteType paletteType = Constants::none; // refactor later
 	std::vector<std::vector<Constants::oxPixel>> pixels = createOxPixelsFromImage(image);
+	return Ox(width, height, pixels, paletteType);
+}
+
+Ox Converter::convertImageToOxDedicatedPalette(Image* image) {
+	int width = image->getWidth();
+	int height = image->getHeight();
+	Constants::paletteType paletteType = Constants::dedicated; // refactor later
+	std::vector<std::vector<Constants::oxPixel>> pixels = createOxPixelsFromImage(image);
+	Ox ox(width, height, pixels, paletteType);
+	ox.setDedicatedPalette(image);
+	return ox;
+}
+
+Ox Converter::convertImageToOxGreyScale(Image* image) {
+	int width = image->getWidth();
+	int height = image->getHeight();
+	Constants::paletteType paletteType = Constants::grey; // refactor later
+	std::vector<std::vector<Constants::oxPixel>> pixels = createGreyScalePixels(image);
 	return Ox(width, height, pixels, paletteType);
 }
 
@@ -251,6 +270,6 @@ Image Converter::convertOxToImage(Ox* ox) {
 	return Image(width, height, pixels);
 }
 
-
 Converter::~Converter() {
+
 }

@@ -3,7 +3,6 @@
 #include <string>
 #include <SDL_ttf.h>
 #include <vector>
-#include "Constants.h"
 #include "Ox.h"
 
 
@@ -15,3 +14,4 @@ void renderText(SDL_Renderer *renderer, std::string text, TTF_Font *font, SDL_Re
 int distanceBetweenColors(const SDL_Color &imageColor, const SDL_Color &paletteColor);
 std::vector<std::vector<uint8_t>> ditheringGreyScale(const std::vector<std::vector<uint8_t>> &pixelData);
 std::vector<std::vector<uint8_t>> ditheringColor(const std::vector<std::vector<SDL_Color>> &pixelMap, Ox &targetImage);
+void tooSmallSurfaceExceptionHandle(SDL_Renderer *renderer, TTF_Font *font);

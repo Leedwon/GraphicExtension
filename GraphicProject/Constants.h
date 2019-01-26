@@ -8,7 +8,7 @@ private:
 	Constants();
 public:
 	typedef uint8_t oxPixel; 
-	enum paletteType { none, dedicated, grey, imposed };
+	enum paletteType { none, dedicated, grey, imposed, bwDith, dedicatedDith };
 	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage};
 	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering};
 
@@ -24,11 +24,15 @@ public:
 	static const SDL_Color BUTTON_FRAME;
 	static const SDL_Color TEXT_COLOR;
 
+	static const SDL_Color APP_BACKGROUND;
+
 	/*strings for buttons names*/
 	static const std::string BUTTON_PALETTE_MENU;
 	static const std::string BUTTON_PALETTE_NONE;
 	static const std::string BUTTON_PALETTE_IMPOSED;
 	static const std::string BUTTON_PALETTE_DEDICATED;
+	static const std::string BUTTON_PALETTE_DEDICATED_DITHERING;
+	static const std::string BUTTON_PALETTE_BW_DITHERING;
 	static const std::string BUTTON_PALETTE_GREY;
 	static const std::string BUTTON_FILE_INFOS;
 	static const std::string BUTTON_SHOW_IMAGES;
@@ -39,6 +43,7 @@ public:
 	static const std::string BUTTON_IMAGE_GREY;
 	static const std::string BUTTON_IMAGE_BW_DITHERING;
 	static const std::string BUTTON_BACK;
+	static const std::string EXCEPTION_TOO_SMALL_SURFACE;
 	static const std::string APP_NAME;
 
 	static const int SIGNATURE_SIZE = 2;

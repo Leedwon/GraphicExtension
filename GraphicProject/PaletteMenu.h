@@ -7,6 +7,8 @@ public:
 	Button buttonDedicatedPalette;
 	Button buttonGreyPalette;
 	Button buttonImposedPalette;
+	Button buttonBwDithPalette;
+	Button buttonDedicatedDithPalette;
 	void disableAllButtons();
 	void enableAllButtons();
 	// true if any pressed false otherwise
