@@ -245,3 +245,50 @@ Image Converter::convertOxToImage(Ox* ox) {
 
 Converter::~Converter() {
 }
+
+std::array<SDL_Color, Constants::PALETTE_SIZE> Converter::createImposedPalette() {
+
+
+
+	std::array<SDL_Color, Constants::PALETTE_SIZE> palette;
+
+	int temp1[7] = { 0,42,85,125,170,213,255 };	// variables of green value
+	int temp2[6] = { 0,51,102,154,204,255 };	// variables of blue and red values
+
+
+	int counter = 0;
+
+
+	for (int i = 0;i<6;i++) {
+
+		for (int j = 0;j<7;j++) {
+
+			for (int a = 0;a<6;a++) {
+
+				palette[counter].r = temp2[i];
+				palette[counter].g = temp1[j];
+				palette[counter++].b = temp2[a];
+
+			}
+		}
+	}
+	palette[counter].r = 0;
+	palette[counter].g = 128;
+	palette[counter++].b = 128;
+	palette[counter].r = 0;
+	palette[counter].g = 0;
+	palette[counter++].b = 128;
+	palette[counter].r = 0;
+	palette[counter].g = 128;
+	palette[counter++].b = 0;
+	palette[counter].r = 128;
+	palette[counter].g = 128;
+	palette[counter++].b = 128;
+
+
+
+	return palette;
+
+
+
+}

@@ -11,6 +11,7 @@ private:
 public:
 	static Constants::oxPixel sdlColorToOxPixel(SDL_Color color);
 	static SDL_Color oxPixelToSdlColor(Constants::oxPixel oxColor);
+	static std::array<SDL_Color, Constants::PALETTE_SIZE> createImposedPalette();
 	static Ox convertImageToOx(Image* image);
 	static Image convertOxToImage(Ox* ox);
 	static void biggest_color_range(std::vector<SDL_Color> &allPixels, int begin, int end);
