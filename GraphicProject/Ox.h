@@ -7,7 +7,7 @@
 
 class Ox {
 public:
-	int paletteType;
+	Constants::paletteType paletteType;
 	bool dithering;
 	unsigned int width;
 	unsigned int height;
