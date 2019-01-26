@@ -87,7 +87,7 @@ int main(int argc, char* args[]) {
 				case(Constants::mainMenu):
 					if (mainMenu.checkForPresses(&event)) {
 						menuState = mainMenu.getMenuState();
-						//when pressed
+						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
 						if (menuState == Constants::paletteMenu) {
 							// navigation to paletteMenu
@@ -97,7 +97,6 @@ int main(int argc, char* args[]) {
 							// navigation to fileInfosMenu
 							imageInfosMenu->draw(renderer, font);
 							imageInfosMenu->enableAllButtons();
-
 						}
 						mainMenu.disableMenu();
 					}
@@ -106,6 +105,7 @@ int main(int argc, char* args[]) {
 					if (paletteMenu.checkForPresses(&event)) {
 						// when any pressed get palette and navigation to main menu
 						palette = paletteMenu.getPressedPalette();
+						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
 						mainMenu.draw(renderer, font);
 						mainMenu.enableAllButtons();
@@ -115,6 +115,7 @@ int main(int argc, char* args[]) {
 					break;
 				case(Constants::fileInfosMenu):
 					if (imageInfosMenu->isBackButtonPressed(&event)) {
+						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
 						imageInfosMenu->disableMenu();
 						mainMenu.enableAllButtons();
@@ -147,6 +148,7 @@ int main(int argc, char* args[]) {
 							SDL_UpdateWindowSurface(window);
 							break;
 						}
+						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
 						imageInfosMenu->disableMenu();
 					}
@@ -155,6 +157,7 @@ int main(int argc, char* args[]) {
 			case (SDL_KEYDOWN):
 				if(menuState == Constants::showingImage) {
 					if (event.key.keysym.sym == SDLK_ESCAPE) {
+						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
 						mainMenu.enableAllButtons();
 						mainMenu.draw(renderer, font);

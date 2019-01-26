@@ -3,7 +3,6 @@
 #include <string>
 #include <SDL_ttf.h>
 #include <vector>
-#include "Constants.h"
 #include "Ox.h"
 
 

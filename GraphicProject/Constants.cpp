@@ -15,9 +15,10 @@ const std::string Constants::BUTTON_IMAGE_RAW = "show in raw colors ";
 const std::string Constants::BUTTON_IMAGE_DEDICATED = "show with dedicated palette (256 shades)";
 const std::string Constants::BUTTON_IMAGE_GREY = "show in grey (256 shades)";
 const std::string Constants::BUTTON_IMAGE_BW_DITHERING = "show with black white dithering";
-const SDL_Color Constants::BUTTON_BACKGROUND = {0,100, 0, 1};
-const SDL_Color Constants::BUTTON_FRAME = {0, 0, 0, 1};
+const SDL_Color Constants::BUTTON_BACKGROUND = { 102, 0, 102, 1};// prev 0 100 0 1
+const SDL_Color Constants::BUTTON_FRAME = { 0, 255, 0, 1}; // 153, 0, 153
 const SDL_Color Constants::TEXT_COLOR = {255 ,255, 255, 1};
+const SDL_Color Constants::APP_BACKGROUND = {0, 0, 0, 1};
 
 Constants::Constants() {
 }

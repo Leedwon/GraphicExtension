@@ -24,6 +24,8 @@ public:
 	static const SDL_Color BUTTON_FRAME;
 	static const SDL_Color TEXT_COLOR;
 
+	static const SDL_Color APP_BACKGROUND;
+
 	/*strings for buttons names*/
 	static const std::string BUTTON_PALETTE_MENU;
 	static const std::string BUTTON_PALETTE_NONE;
