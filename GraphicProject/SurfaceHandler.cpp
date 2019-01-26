@@ -1,9 +1,8 @@
 #include "SurfaceHandler.h"
 
 
-
 SDL_Color SurfaceHandler::getPixel(const int& x, const int& y) {
-	Uint8 *pixAddress = getPixelAddress(x, y);
+	Uint8* pixAddress = getPixelAddress(x, y);
 	SDL_Color pixel = {};
 	if (pixAddress) {
 		Uint32 rgbColor = 0;
@@ -15,12 +14,12 @@ SDL_Color SurfaceHandler::getPixel(const int& x, const int& y) {
 
 Uint8* SurfaceHandler::getPixelAddress(const int& x, const int& y) {
 	int bytesPerPixel = surface->format->BytesPerPixel;
-	Uint8 *pixelAddress = static_cast<Uint8*>(surface->pixels) + y * surface->pitch + x * bytesPerPixel;
+	Uint8* pixelAddress = static_cast<Uint8*>(surface->pixels) + y * surface->pitch + x * bytesPerPixel;
 	return pixelAddress;
 }
 
 void SurfaceHandler::setPixel(const int& x, const int& y, const SDL_Color& color) {
-	Uint8 *pixAddress = getPixelAddress(x, y);
+	Uint8* pixAddress = getPixelAddress(x, y);
 	Uint32 newPix = SDL_MapRGB(surface->format, color.r, color.g, color.b);
 	int bytesPerPixel = surface->format->BytesPerPixel;
 	switch (bytesPerPixel) {
@@ -37,7 +36,8 @@ void SurfaceHandler::setPixel(const int& x, const int& y, const SDL_Color& color
 			pixAddress[0] = (newPix >> 16) & 0xff;
 			pixAddress[1] = (newPix >> 8) & 0xff;
 			pixAddress[2] = newPix & 0xff;
-		} else {
+		}
+		else {
 			pixAddress[0] = newPix & 0xff;
 			pixAddress[1] = (newPix >> 8) & 0xff;
 			pixAddress[2] = (newPix >> 16) & 0xff;
@@ -51,7 +51,7 @@ void SurfaceHandler::setPixel(const int& x, const int& y, const SDL_Color& color
 }
 
 void SurfaceHandler::setPixel(const int& x, const int& y, int r, int g, int b) {
-	Uint8 *pixAddress = getPixelAddress(x, y);
+	Uint8* pixAddress = getPixelAddress(x, y);
 	Uint32 newPix = SDL_MapRGB(surface->format, r, g, b);
 	int bytesPerPixel = surface->format->BytesPerPixel;
 	switch (bytesPerPixel) {
@@ -68,7 +68,8 @@ void SurfaceHandler::setPixel(const int& x, const int& y, int r, int g, int b) {
 			pixAddress[0] = (newPix >> 16) & 0xff;
 			pixAddress[1] = (newPix >> 8) & 0xff;
 			pixAddress[2] = newPix & 0xff;
-		} else {
+		}
+		else {
 			pixAddress[0] = newPix & 0xff;
 			pixAddress[1] = (newPix >> 8) & 0xff;
 			pixAddress[2] = (newPix >> 16) & 0xff;
@@ -81,13 +82,13 @@ void SurfaceHandler::setPixel(const int& x, const int& y, int r, int g, int b) {
 	}
 }
 
-void SurfaceHandler::drawImage(Image *image, int startingX, int startingY) {
+void SurfaceHandler::drawImage(Image* image, int startingX, int startingY) {
 	if (image->getWidth() + startingX > surface->w || image->getHeight() + startingY > surface->h)
 		throw TOO_SMALL_SURFACE_EXCEPTION;
-	for(int height = 0; height < image->getHeight(); ++height) {
-		for (int width = 0; width < image->getWidth(); ++width) 
+	for (int height = 0; height < image->getHeight(); ++height) {
+		for (int width = 0; width < image->getWidth(); ++width)
 			setPixel(width + startingX, height + startingY, image->getPixel(width, height));
-	}		
+	}
 }
 
 void SurfaceHandler::drawOx(Ox* ox, int startingX, int startingY) {
@@ -98,6 +99,28 @@ void SurfaceHandler::drawOx(Ox* ox, int startingX, int startingY) {
 			Constants::oxPixel pixel = ox->getPixel(width, height);
 			SDL_Color sdlFromOx;
 			sdlFromOx = Converter::oxPixelToSdlColor(pixel);
+			setPixel(width + startingX, height + startingY, sdlFromOx);
+		}
+	}
+}
+
+void SurfaceHandler::drawOxFromPalette(Ox* ox, int startingX, int startingY) {
+	if (ox->paletteType != Constants::none) {
+		if (ox->width + startingX > surface->w || ox->height + startingY > surface->h)
+			throw TOO_SMALL_SURFACE_EXCEPTION;
+		for (int height = 0; height < ox->height; ++height) {
+			for (int width = 0; width < ox->width; ++width) {
+				setPixel(width + startingX, height + startingY, ox->getPixelFromPalette(width, height));
+			}
+		}
+	}
+}
+
+void SurfaceHandler::drawPixels(std::vector<std::vector<Constants::oxPixel>> pixels, int startingX, int startingY) {
+	for (int height = 0; height < pixels.size(); ++height) {
+		for (int width = 0; width < pixels[0].size(); ++width) {
+			Constants::oxPixel currentPix = pixels[height][width];
+			SDL_Color sdlFromOx{ currentPix, currentPix, currentPix, 1 };
 			setPixel(width + startingX, height + startingY, sdlFromOx);
 		}
 	}

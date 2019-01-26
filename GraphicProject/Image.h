@@ -20,4 +20,5 @@ public:
 	//Getters & Setters
 	int getWidth();
 	int getHeight();
+	std::string getFilePath() {return filePath; }
 };

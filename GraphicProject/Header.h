@@ -16,11 +16,13 @@ private:
 		uint32_t width;
 		uint32_t height;
 		uint8_t paletteType;
+		uint8_t dithering;
+		uint8_t compressionType;
 	};
 public:
-	FileHeader fileHeader;
-	PictureHeader pictureHeader;
-	Header(Ox *ox);
+	FileHeader fileHeader{};
+	PictureHeader pictureHeader{};
+	Header(Ox* ox, uint32_t sizeOfCompressedPixels, uint8_t compressionType);
 	~Header();
 };
 

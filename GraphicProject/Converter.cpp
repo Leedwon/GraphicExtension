@@ -46,9 +46,6 @@ void Converter::sort_by_color(std::vector<SDL_Color> &allPixels, int begin, int 
 
 }
 
-
-
-
 void Converter::biggest_color_range(std::vector<SDL_Color> &allPixels, int begin, int end) {
 
 	
@@ -108,8 +105,6 @@ void Converter::biggest_color_range(std::vector<SDL_Color> &allPixels, int begin
 
 }
 
-
-// just temporary solution pallete should be created based on image TODO :: 
 std::array<SDL_Color, Constants::PALETTE_SIZE> Converter::createDedicatedPalette(Image* img) {
 
 	std::array<SDL_Color, Constants::PALETTE_SIZE> palette;
@@ -178,6 +173,22 @@ std::array<SDL_Color, Constants::PALETTE_SIZE> Converter::createDedicatedPalette
 
 }
 
+std::vector<std::vector<Constants::oxPixel>> Converter::createGreyScalePixels(Image* img) {
+	std::vector<std::vector<Constants::oxPixel>> result;
+	result.resize(img->getHeight());
+	for(int i = 0; i < img->getHeight(); ++i) {
+		result[i].resize(img->getWidth());
+	}
+	for(int y = 0; y < img->getHeight(); ++y) {
+		for (int x = 0; x < img->getWidth(); ++x) {
+			SDL_Color currentPix = img->getPixel(x, y);
+			// this will always result in no more than 256 because 0.2989 * 255 +0.5870 *255+ 0.114*255 = 255
+			const int bwPixel = 0.2989 * currentPix.r + 0.5870 * currentPix.g + 0.114 * currentPix.b;
+			result[y][x] = bwPixel;
+		}
+	}
+	return result;
+}
 std::vector<std::vector<Constants::oxPixel>> Converter::createOxPixelsFromImage(Image* image) {
 	std::vector<std::vector<Constants::oxPixel>> pixels;
 	pixels.resize(image->getHeight()); // init vector
@@ -215,7 +226,6 @@ uint8_t Converter::sdlColorToOxPixel(SDL_Color color) {
 	return oxColor;
 }
 
-
 SDL_Color Converter::oxPixelToSdlColor(Constants::oxPixel oxColor) {
 	SDL_Color color;
 	color.r = (oxColor & Constants::MASK_BITS_RED);
@@ -226,13 +236,31 @@ SDL_Color Converter::oxPixelToSdlColor(Constants::oxPixel oxColor) {
 }
 
 
-Ox Converter::convertImageToOx(Image* image) {
+
+Ox Converter::convertImageToOxRawColors(Image* image) {
 	int width = image->getWidth();
 	int height = image->getHeight();
-	int paletteType = 0; // refactor later
+	Constants::paletteType paletteType = Constants::none; // refactor later
 	std::vector<std::vector<Constants::oxPixel>> pixels = createOxPixelsFromImage(image);
-	std::array<SDL_Color, Constants::PALETTE_SIZE> palette = createDedicatedPalette(image);
-	return Ox(paletteType, width, height, pixels, palette);
+	return Ox(width, height, pixels, paletteType);
+}
+
+Ox Converter::convertImageToOxDedicatedPalette(Image* image) {
+	int width = image->getWidth();
+	int height = image->getHeight();
+	Constants::paletteType paletteType = Constants::dedicated; // refactor later
+	std::vector<std::vector<Constants::oxPixel>> pixels = createOxPixelsFromImage(image);
+	Ox ox(width, height, pixels, paletteType);
+	ox.setDedicatedPalette(image);
+	return ox;
+}
+
+Ox Converter::convertImageToOxGreyScale(Image* image) {
+	int width = image->getWidth();
+	int height = image->getHeight();
+	Constants::paletteType paletteType = Constants::grey; // refactor later
+	std::vector<std::vector<Constants::oxPixel>> pixels = createGreyScalePixels(image);
+	return Ox(width, height, pixels, paletteType);
 }
 
 Image Converter::convertOxToImage(Ox* ox) {
@@ -242,8 +270,8 @@ Image Converter::convertOxToImage(Ox* ox) {
 	return Image(width, height, pixels);
 }
 
-
 Converter::~Converter() {
+
 }
 
 std::array<SDL_Color, Constants::PALETTE_SIZE> Converter::createImposedPalette() {

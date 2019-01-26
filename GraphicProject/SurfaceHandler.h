@@ -17,10 +17,12 @@ public:
 	void setPixel(const int &x, const int &y, const SDL_Color &color);
 	void setPixel(const int &x, const int &y, int r, int g, int b);
 	/* for this function to show results SDL_UpdateWindowSurface(window) must be called after
-	 * Image *image is passed as pointer param because there is no copy ctor in Image class TODO :: <--- but we wont have time most likely
 	 */
 	void drawImage(Image *image, int startingX, int startingY);
 	void drawOx(Ox *ox, int startingX, int startingY);
+	void drawOxFromPalette(Ox *ox, int startingX, int startingY);
+	// pixels stored in following manner pixels[height][width]
+	void drawPixels(std::vector<std::vector<Constants::oxPixel>> pixels, int startingx, int startingY);
 	SurfaceHandler(SDL_Surface *surf) : surface(surf) {}
 	~SurfaceHandler();
 };
