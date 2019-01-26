@@ -8,6 +8,7 @@
 class Ox {
 public:
 	int paletteType;
+	bool dithering;
 	unsigned int width;
 	unsigned int height;
 	// pixells stored as followed pixels[height][width]
