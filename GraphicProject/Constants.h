@@ -8,7 +8,7 @@ private:
 	Constants();
 public:
 	typedef uint8_t oxPixel; 
-	enum paletteType { none, dedicated, grey, imposed };
+	enum paletteType { none, dedicated, grey, imposed, bwDith, dedicatedDith };
 	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage};
 	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering};
 
@@ -31,6 +31,8 @@ public:
 	static const std::string BUTTON_PALETTE_NONE;
 	static const std::string BUTTON_PALETTE_IMPOSED;
 	static const std::string BUTTON_PALETTE_DEDICATED;
+	static const std::string BUTTON_PALETTE_DEDICATED_DITHERING;
+	static const std::string BUTTON_PALETTE_BW_DITHERING;
 	static const std::string BUTTON_PALETTE_GREY;
 	static const std::string BUTTON_FILE_INFOS;
 	static const std::string BUTTON_SHOW_IMAGES;

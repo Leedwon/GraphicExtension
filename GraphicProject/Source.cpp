@@ -89,14 +89,15 @@ int main(int argc, char* args[]) {
 						menuState = mainMenu.getMenuState();
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
-						if (menuState == Constants::paletteMenu) {
-							// navigation to paletteMenu
-							paletteMenu.draw(renderer, font);
-							paletteMenu.enableAllButtons();
-						} else if (menuState == Constants::fileInfosMenu) {
+						 if (menuState == Constants::fileInfosMenu) {
 							// navigation to fileInfosMenu
 							imageInfosMenu->draw(renderer, font);
 							imageInfosMenu->enableAllButtons();
+						} else if (menuState == Constants::compressAndSave) {
+							// choose palette and dithering then save
+							paletteMenu.draw(renderer, font);
+							paletteMenu.enableAllButtons();
+							menuState = Constants::paletteMenu;
 						}
 						mainMenu.disableMenu();
 					}

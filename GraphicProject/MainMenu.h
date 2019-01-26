@@ -3,7 +3,6 @@
 #include "Constants.h"
 class MainMenu {
 public:
-	Button buttonPaletteMenu;
 	Button buttonFileInfos;
 	Button buttonCompressAndSave;
 	void disableAllButtons();
