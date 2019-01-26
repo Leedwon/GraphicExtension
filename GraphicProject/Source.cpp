@@ -1,7 +1,6 @@
 #include <SDL.h>
 #include <string>
 #include "Image.h"
-#include <iostream>
 #include "SurfaceHandler.h"
 #include "Compressor.h"
 #include "Ox.h"
@@ -118,6 +117,8 @@ int main(int argc, char* args[]) {
 							screenHandler->drawImage(image, 0, 0);
 							screenHandler->drawOxFromPalette(ox, ox->width, 0);
 							screenHandler->drawOx(ox, ox->width, ox->height);
+							screenHandler->drawPixels(Converter::getBlackWhitePixels(image), 0, ox->height);
+							screenHandler->drawPixels(ditheringGreyScale(Converter::getBlackWhitePixels(image)), 0, ox->height * 2);
 							SDL_UpdateWindowSurface(window);
 						}
 						mainMenu.disableMenu();

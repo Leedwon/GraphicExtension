@@ -21,6 +21,8 @@ public:
 	void drawImage(Image *image, int startingX, int startingY);
 	void drawOx(Ox *ox, int startingX, int startingY);
 	void drawOxFromPalette(Ox *ox, int startingX, int startingY);
+	// pixels stored in following manner pixels[height][width]
+	void drawPixels(std::vector<std::vector<Constants::oxPixel>> pixels, int startingx, int startingY);
 	SurfaceHandler(SDL_Surface *surf) : surface(surf) {}
 	~SurfaceHandler();
 };
