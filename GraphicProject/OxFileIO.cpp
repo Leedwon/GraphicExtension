@@ -40,23 +40,25 @@ Ox* OxFileIO::readOx(std::string fileName)
 			{
 				is >> compressedPixels[i];
 			}
+			std::vector<uint8_t> decompressedPixels;
 			switch(compressionType)
 			{
 			case Constants::COMPRESSION_RLE:
-				std::vector<uint8_t> decompressedPixels;
 				decompressedPixels = Decompressor::decompressRLE(compressedPixels);
-				ox->pixels.resize(ox->height);
-				for(int i = 0; i < ox->height; i++)
-				{
-					ox->pixels[i].resize(ox->width);
-					for (int j = 0; j < ox->width; j++)
-					{
-						ox->pixels[i][j] = decompressedPixels[i*ox->width + j];
-					}
-				}
+				break;
+			case Constants::COMPRESSION_BYTE_RUN:
+				decompressedPixels = Decompressor::decopressByteRun(compressedPixels);
 				break;
 			}
-
+			ox->pixels.resize(ox->height);
+			for (int i = 0; i < ox->height; i++)
+			{
+				ox->pixels[i].resize(ox->width);
+				for (int j = 0; j < ox->width; j++)
+				{
+					ox->pixels[i][j] = decompressedPixels[i*ox->width + j];
+				}
+			}
 		}
 	}catch (std::exception& e)
 	{
