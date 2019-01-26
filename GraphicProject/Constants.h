@@ -18,6 +18,10 @@ public:
 	static const int WIDTH = 1080;
 	static const int HEIGHT = 960;
 
+	/*compression type*/
+	static const int COMPRESSION_RLE = 0;
+	static const int COMPRESSION_BYTE_RUN = 1;
+
 	/*colors for buttons*/
 	static const SDL_Color BUTTON_BACKGROUND;
 	static const SDL_Color BUTTON_FRAME;
