@@ -5,31 +5,31 @@
 void MainMenu::disableAllButtons() {
 	buttonPaletteMenu.enabled = false;
 	buttonFileInfos.enabled = false;
-	buttonShowImages.enabled = false;
+	buttonCompressAndSave.enabled = false;
 }
 
 void MainMenu::enableAllButtons() {
 	buttonPaletteMenu.enabled = true;
 	buttonFileInfos.enabled = true;
-	buttonShowImages.enabled = true;
+	buttonCompressAndSave.enabled = true;
 }
 
 void MainMenu::setAllButtonsToFalseState() {
 	buttonPaletteMenu.pressed = false;
 	buttonFileInfos.pressed = false;
-	buttonShowImages.pressed = false;
+	buttonCompressAndSave.pressed = false;
 }
 
 bool MainMenu::checkForPresses(SDL_Event* event) {
 	buttonPaletteMenu.pressed = buttonPaletteMenu.checkForPress(event);
 	buttonFileInfos.pressed = buttonFileInfos.checkForPress(event);
-	buttonShowImages.pressed = buttonShowImages.checkForPress(event);
+	buttonCompressAndSave.pressed = buttonCompressAndSave.checkForPress(event);
 	return isAnyButtonPressed();
 }
 
 
 bool MainMenu::isAnyButtonPressed() {
-	return (buttonPaletteMenu.pressed || buttonFileInfos.pressed || buttonShowImages.pressed);
+	return (buttonPaletteMenu.pressed || buttonFileInfos.pressed || buttonCompressAndSave.pressed);
 }
 
 Constants::menuState MainMenu::getMenuState() {
@@ -38,15 +38,15 @@ Constants::menuState MainMenu::getMenuState() {
 		state = Constants::paletteMenu;
 	else if (buttonFileInfos.pressed)
 		state = Constants::fileInfosMenu;
-	else if (buttonShowImages.pressed)
-		state = Constants::showImagesMenu;
+	else if (buttonCompressAndSave.pressed)
+		state = Constants::compressAndSave;
 	return state;
 }
 
 void MainMenu::draw(SDL_Renderer* renderer, TTF_Font* font) {
 	buttonPaletteMenu.draw(renderer, Constants::BUTTON_FRAME, Constants::BUTTON_BACKGROUND, font);
 	buttonFileInfos.draw(renderer, Constants::BUTTON_FRAME, Constants::BUTTON_BACKGROUND, font);
-	buttonShowImages.draw(renderer, Constants::BUTTON_FRAME, Constants::BUTTON_BACKGROUND, font);
+	buttonCompressAndSave.draw(renderer, Constants::BUTTON_FRAME, Constants::BUTTON_BACKGROUND, font);
 }
 
 void MainMenu::disableMenu() {
@@ -59,9 +59,9 @@ MainMenu::MainMenu() : buttonPaletteMenu(Constants::WIDTH / 2 - Constants::BUTTO
                        buttonFileInfos(Constants::WIDTH / 2 - Constants::BUTTON_WIDTH / 2, Constants::BUTTON_HEIGHT,
                                        Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT,
                                        Constants::BUTTON_FILE_INFOS),
-                       buttonShowImages(Constants::WIDTH / 2 - Constants::BUTTON_WIDTH / 2,
-                                        Constants::BUTTON_HEIGHT * 2, Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT,
-                                        Constants::BUTTON_SHOW_IMAGES) {
+                       buttonCompressAndSave(Constants::WIDTH / 2 - Constants::BUTTON_WIDTH / 2,
+                                             Constants::BUTTON_HEIGHT * 2, Constants::BUTTON_WIDTH,
+                                             Constants::BUTTON_HEIGHT, Constants::BUTTON_COMPRESS_SAVE) {
 }
 
 

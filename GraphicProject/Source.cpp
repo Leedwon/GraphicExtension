@@ -14,10 +14,8 @@
 
 int main(int argc, char* args[]) {
 	SDL_Window* window;
-	SDL_Surface* bmpSurface = nullptr;
 	SDL_Surface* screenSurface;
 	SurfaceHandler* screenHandler;
-	SDL_Texture *tx = nullptr;
 	SDL_Event event; // Declare event handle
 	char* dropped_filedir = nullptr; // Pointer for directory of dropped file
 	Image* image = nullptr;
@@ -56,13 +54,12 @@ int main(int argc, char* args[]) {
 	SDL_UpdateWindowSurface(window);
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
 	SDL_bool done = SDL_FALSE;
-	SDL_bool test = SDL_FALSE;
 	MainMenu mainMenu;
 	PaletteMenu paletteMenu;
 	ImageInfosMenu *imageInfosMenu = nullptr;
 	SDL_Rect textPlace{ Constants::WIDTH / 2 - 240, 0, 480, 120 };
 	renderText(renderer, "Please drag and drop file that you want to work on", font, &textPlace, Constants::TEXT_COLOR);
-	textPlace.y += Constants::BUTTON_WIDTH;
+	textPlace.y += Constants::BUTTON_HEIGHT;
 	renderText(renderer, "Loading file can take a while, sorry", font, &textPlace, Constants::TEXT_COLOR);
 
 	while (!done) {
@@ -77,15 +74,8 @@ int main(int argc, char* args[]) {
 			case (SDL_DROPFILE):
 				dropped_filedir = event.drop.file;
 				image = new Image(dropped_filedir);
-				ox = new Ox(Converter::convertImageToOx(image));
-				ox->setDedicatedPalette(image);
-				bmpSurface = SDL_LoadBMP(dropped_filedir);
-				tx = SDL_CreateTextureFromSurface(renderer, bmpSurface);
-				SDL_FreeSurface(bmpSurface);
-				imageInfosMenu = new ImageInfosMenu(*image);
-				// TODO:: do some things with iamge
+				imageInfosMenu = new ImageInfosMenu(image);
 				SDL_free(dropped_filedir); // Free dropped_filedir memory
-				fileDropped = true;
 				SDL_RenderClear(renderer);
 				mainMenu.draw(renderer, font);
 				mainMenu.enableAllButtons();
@@ -105,24 +95,11 @@ int main(int argc, char* args[]) {
 							paletteMenu.enableAllButtons();
 						} else if (menuState == Constants::fileInfosMenu) {
 							// navigation to fileInfosMenu
-							SDL_Rect bmpRect = { Constants::WIDTH / 2 , Constants::HEIGHT / 2, image->getWidth(), image->getHeight() };
-							SDL_RenderCopy(renderer, tx, NULL, &bmpRect);
-							SDL_RenderPresent(renderer);
 							imageInfosMenu->draw(renderer, font);
-							imageInfosMenu->backButton.enabled = true;
+							imageInfosMenu->enableAllButtons();
 
-						} else if (menuState == Constants::showImagesMenu) {
-							SDL_RenderClear(renderer);
-							mainMenu.disableMenu();
-							screenHandler->drawImage(image, 0, 0);
-							screenHandler->drawOxFromPalette(ox, ox->width, 0);
-							screenHandler->drawOx(ox, ox->width, ox->height);
-							screenHandler->drawPixels(Converter::getBlackWhitePixels(image), 0, ox->height);
-							screenHandler->drawPixels(ditheringGreyScale(Converter::getBlackWhitePixels(image)), 0, ox->height * 2);
-							SDL_UpdateWindowSurface(window);
 						}
 						mainMenu.disableMenu();
-
 					}
 					break;
 				case(Constants::paletteMenu):
@@ -137,18 +114,46 @@ int main(int argc, char* args[]) {
 					}
 					break;
 				case(Constants::fileInfosMenu):
-					if (imageInfosMenu->backButton.checkForPress(&event)) {
+					if (imageInfosMenu->isBackButtonPressed(&event)) {
 						SDL_RenderClear(renderer);
-						// navigation to main menu
-						imageInfosMenu->backButton.enabled = false;
+						imageInfosMenu->disableMenu();
 						mainMenu.enableAllButtons();
 						mainMenu.draw(renderer, font);
 						menuState = Constants::mainMenu;
+					} else if(imageInfosMenu->isAnyImageButtonPressed(&event)) {
+						menuState = Constants::showingImage;
+						Ox *ox = new Ox(Converter::convertImageToOx(image));
+						Constants::imageDrawType drawType = imageInfosMenu->getImageDrawType();
+						switch(drawType) {
+						case Constants::original:
+							screenHandler->drawImage(image, 0, 0);
+							SDL_UpdateWindowSurface(window);
+							break;
+						case Constants::rawColors:
+							screenHandler->drawOx(ox, 0, 0);
+							SDL_UpdateWindowSurface(window);
+							break;
+						case Constants::dedicatedPalette:
+							ox->setDedicatedPalette(image);
+							screenHandler->drawOxFromPalette(ox, 0, 0);
+							SDL_UpdateWindowSurface(window);
+							break;
+						case Constants::greyScale:
+							screenHandler->drawPixels(Converter::createGreyScalePixels(image), 0, 0);
+							SDL_UpdateWindowSurface(window);
+							break;
+						case Constants::bwDithering:
+							screenHandler->drawPixels(ditheringGreyScale(Converter::createGreyScalePixels(image)), 0, 0);
+							SDL_UpdateWindowSurface(window);
+							break;
+						}
+						SDL_RenderClear(renderer);
+						imageInfosMenu->disableMenu();
 					}
 					break;
 				}
 			case (SDL_KEYDOWN):
-				if(menuState == Constants::showImagesMenu) {
+				if(menuState == Constants::showingImage) {
 					if (event.key.keysym.sym == SDLK_ESCAPE) {
 						SDL_RenderClear(renderer);
 						mainMenu.enableAllButtons();

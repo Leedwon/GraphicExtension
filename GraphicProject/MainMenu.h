@@ -5,7 +5,7 @@ class MainMenu {
 public:
 	Button buttonPaletteMenu;
 	Button buttonFileInfos;
-	Button buttonShowImages;
+	Button buttonCompressAndSave;
 	void disableAllButtons();
 	void enableAllButtons();
 	void setAllButtonsToFalseState();
