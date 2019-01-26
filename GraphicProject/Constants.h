@@ -41,6 +41,7 @@ public:
 	static const std::string BUTTON_IMAGE_GREY;
 	static const std::string BUTTON_IMAGE_BW_DITHERING;
 	static const std::string BUTTON_BACK;
+	static const std::string EXCEPTION_TOO_SMALL_SURFACE;
 	static const std::string APP_NAME;
 
 	static const int SIGNATURE_SIZE = 2;

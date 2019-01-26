@@ -127,26 +127,48 @@ int main(int argc, char* args[]) {
 						Constants::imageDrawType drawType = imageInfosMenu->getImageDrawType();
 						switch(drawType) {
 						case Constants::original:
-							screenHandler->drawImage(image, 0, 0);
-							SDL_UpdateWindowSurface(window);
-							break;
+							try {
+								screenHandler->drawImage(image, 0, 0);
+								SDL_UpdateWindowSurface(window);
+								break;
+							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+								tooSmallSurfaceExceptioHandle(renderer, font);
+							}
 						case Constants::rawColors:
-							screenHandler->drawOx(ox, 0, 0);
-							SDL_UpdateWindowSurface(window);
-							break;
+							try {
+								screenHandler->drawOx(ox, 0, 0);
+								SDL_UpdateWindowSurface(window);
+								break;
+							}
+							catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+								tooSmallSurfaceExceptioHandle(renderer, font);
+							}
 						case Constants::dedicatedPalette:
-							ox->setDedicatedPalette(image);
-							screenHandler->drawOxFromPalette(ox, 0, 0);
-							SDL_UpdateWindowSurface(window);
-							break;
+							try {
+								ox->setDedicatedPalette(image);
+								screenHandler->drawOxFromPalette(ox, 0, 0);
+								SDL_UpdateWindowSurface(window);
+								break;
+							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+								tooSmallSurfaceExceptioHandle(renderer, font);
+							}
 						case Constants::greyScale:
-							screenHandler->drawPixels(Converter::createGreyScalePixels(image), 0, 0);
-							SDL_UpdateWindowSurface(window);
-							break;
+							try {
+								screenHandler->drawPixels(Converter::createGreyScalePixels(image), 0, 0);
+								SDL_UpdateWindowSurface(window);
+								break;
+							}
+							catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+								tooSmallSurfaceExceptioHandle(renderer, font);
+							}
 						case Constants::bwDithering:
-							screenHandler->drawPixels(ditheringGreyScale(Converter::createGreyScalePixels(image)), 0, 0);
-							SDL_UpdateWindowSurface(window);
-							break;
+							try {
+								screenHandler->drawPixels(ditheringGreyScale(Converter::createGreyScalePixels(image)), 0, 0);
+								SDL_UpdateWindowSurface(window);
+								break;
+							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+								tooSmallSurfaceExceptioHandle(renderer, font); 
+							}
 						}
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
