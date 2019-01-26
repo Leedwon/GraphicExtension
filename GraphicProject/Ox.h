@@ -10,6 +10,7 @@ public:
 	Constants::paletteType paletteType;
 	unsigned int width;
 	unsigned int height;
+	bool dithering;
 	// pixells stored as followed pixels[height][width]
 	std::vector<std::vector<Constants::oxPixel>> paletteIndexes;
 	std::vector<std::vector<Constants::oxPixel>> pixels;
@@ -19,13 +20,10 @@ public:
 	Constants::oxPixel getPixel(int x, int y) { return pixels[y][x]; }
 	std::vector<std::vector<Constants::oxPixel>> getPixelsVector() { return pixels; }
 	Ox(Constants::paletteType paletteType, int width, int height, std::vector<std::vector<Constants::oxPixel>> pixelsVector,
-	   std::array<SDL_Color, Constants::PALETTE_SIZE> paletteArr);
+		std::array<SDL_Color, Constants::PALETTE_SIZE> paletteArr);
 
 	Ox(int width, int height, std::vector<std::vector<Constants::oxPixel>> pixelsVector,
-	   Constants::paletteType paletteType) : width(width), height(height), pixels(pixelsVector),
-	                                         paletteType(paletteType) {
-	}
-
+		Constants::paletteType paletteType);
 	Ox();
 	~Ox();
 };

@@ -124,7 +124,7 @@ int main(int argc, char* args[]) {
 						menuState = Constants::mainMenu;
 					} else if(imageInfosMenu->isAnyImageButtonPressed(&event)) {
 						menuState = Constants::showingImage;
-						Ox *ox = new Ox(Converter::convertImageToOx(image));
+						Ox *ox = new Ox(Converter::convertImageToOxRawColors(image));
 						Constants::imageDrawType drawType = imageInfosMenu->getImageDrawType();
 						switch(drawType) {
 						case Constants::original:
@@ -133,7 +133,7 @@ int main(int argc, char* args[]) {
 								SDL_UpdateWindowSurface(window);
 								break;
 							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptioHandle(renderer, font);
+								tooSmallSurfaceExceptionHandle(renderer, font);
 							}
 						case Constants::rawColors:
 							try {
@@ -142,7 +142,7 @@ int main(int argc, char* args[]) {
 								break;
 							}
 							catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptioHandle(renderer, font);
+								tooSmallSurfaceExceptionHandle(renderer, font);
 							}
 						case Constants::dedicatedPalette:
 							try {
@@ -151,7 +151,7 @@ int main(int argc, char* args[]) {
 								SDL_UpdateWindowSurface(window);
 								break;
 							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptioHandle(renderer, font);
+								tooSmallSurfaceExceptionHandle(renderer, font);
 							}
 						case Constants::greyScale:
 							try {
@@ -160,7 +160,7 @@ int main(int argc, char* args[]) {
 								break;
 							}
 							catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptioHandle(renderer, font);
+								tooSmallSurfaceExceptionHandle(renderer, font);
 							}
 						case Constants::bwDithering:
 							try {
@@ -168,7 +168,7 @@ int main(int argc, char* args[]) {
 								SDL_UpdateWindowSurface(window);
 								break;
 							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptioHandle(renderer, font); 
+								tooSmallSurfaceExceptionHandle(renderer, font); 
 							}
 						}
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);

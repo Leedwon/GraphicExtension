@@ -237,7 +237,7 @@ std::vector<std::vector<uint8_t>> ditheringColor(const std::vector<std::vector<S
 	return ditheringData;
 }
 
-void tooSmallSurfaceExceptioHandle(SDL_Renderer* renderer, TTF_Font* font) {
+void tooSmallSurfaceExceptionHandle(SDL_Renderer* renderer, TTF_Font* font) {
 	SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 	SDL_RenderClear(renderer);
 	SDL_Rect exceptionRect{ 0, 0, Constants::WIDTH, Constants::BUTTON_HEIGHT };

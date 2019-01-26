@@ -33,6 +33,18 @@ void Ox::setDedicatedPalette(Image *img) {
 Ox::Ox(Constants::paletteType palType, int w, int h, std::vector<std::vector<Constants::oxPixel>> pixelsVector,
        std::array<SDL_Color, Constants::PALETTE_SIZE> paletteArr) : paletteType(palType), width(w), height(h),
                                                                     pixels(pixelsVector), colorPalette(paletteArr) {
+	dithering = false;
+	if (paletteType == Constants::bwDith || paletteType == Constants::dedicatedDith)
+		dithering = true;
+}
+
+
+Ox::Ox(int width, int height, std::vector<std::vector<Constants::oxPixel>> pixelsVector,
+	Constants::paletteType paletteType) : width(width), height(height), pixels(pixelsVector),
+	paletteType(paletteType) {
+	dithering = false;
+	if (paletteType == Constants::bwDith || paletteType == Constants::dedicatedDith)
+		dithering = true;
 }
 
 Ox::~Ox() {
