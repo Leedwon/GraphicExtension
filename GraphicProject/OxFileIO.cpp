@@ -21,8 +21,8 @@ Ox* OxFileIO::readOx(std::string fileName)
 			is.read((char*)&ox->width, sizeof(ox->width));
 			is.read((char*)&ox->height, sizeof(ox->height));
 			is.read((char*)&palette, sizeof(palette));
-			ox->paletteType = Header::intToPaletteType(palette);
 			is.read((char*)&compressionType, sizeof(compressionType));
+			ox->paletteType = Header::intToPaletteType(palette);
 			switch (ox->paletteType)
 			{
 			case Constants::paletteType::dedicated:
@@ -58,7 +58,7 @@ Ox* OxFileIO::readOx(std::string fileName)
 					ox->paletteIndexes[i].resize(ox->width);
 					for (int j = 0; j < ox->width; j++)
 					{
-						ox->paletteIndexes[i][j] = decompressedPixels[i*ox->width + j];
+						ox->paletteIndexes[i][j] = decompressedPixels[i*ox->height + j];
 					}
 				}
 			} else
@@ -69,7 +69,7 @@ Ox* OxFileIO::readOx(std::string fileName)
 					ox->pixels[i].resize(ox->width);
 					for (int j = 0; j < ox->width; j++)
 					{
-						ox->pixels[i][j] = decompressedPixels[i*ox->width + j];
+						ox->pixels[i][j] = decompressedPixels[i*ox->height + j];
 					}
 				}
 			}

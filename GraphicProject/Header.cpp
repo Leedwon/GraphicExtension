@@ -53,6 +53,7 @@ Header::Header(Ox *ox, uint32_t sizeOfCompressedPixels, uint8_t compressionType)
 	offset += sizeof(pictureHeader.width);
 	offset += sizeof(pictureHeader.height);
 	offset += sizeof(pictureHeader.paletteType);
+	offset += sizeof(pictureHeader.compressionType);
 	//+pallete
 	switch(ox->paletteType) {
 	case Constants::paletteType::dedicated:
