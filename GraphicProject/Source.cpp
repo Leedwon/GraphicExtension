@@ -89,6 +89,7 @@ int main(int argc, char* args[]) {
 				if (extension == Constants::fileExtension::bmp) {
 					loadedImage = new Image(dropped_filedir);
 					imageInfosMenu = new ImageInfosMenu(loadedImage);
+					SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 					SDL_RenderClear(renderer);
 					mainMenu.draw(renderer, font);
 					mainMenu.enableAllButtons();
@@ -96,11 +97,13 @@ int main(int argc, char* args[]) {
 					menuState = Constants::mainMenu;
 				} else if(extension == Constants::fileExtension::ox) {
 					loadedOx = OxFileIO::readOx(dropped_filedir);
+					SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 					SDL_RenderClear(renderer);
 					oxMenu.draw(renderer, font);
 					oxMenu.enableAllButtons();
 					menuState = Constants::oxMenu;
 				} else {
+					SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 					SDL_RenderClear(renderer);
 					SDL_Rect textPlace{ Constants::WIDTH / 2 - 240, 0, 480, 120 };
 					renderText(renderer, Constants::WRONG_FILE_EXTENSION, font, &textPlace, Constants::TEXT_COLOR);
@@ -150,6 +153,15 @@ int main(int argc, char* args[]) {
 						OxFileIO::saveOx(filePath, ox);
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
+						SDL_Rect textPlace{ Constants::WIDTH / 2 - 240, 0, 480, 120 };
+						renderText(renderer, "file saved correctly", font, &textPlace, Constants::TEXT_COLOR);
+						textPlace.x = 0;
+						textPlace.w = Constants::WIDTH;
+						textPlace.y += Constants::BUTTON_WIDTH;
+						renderText(renderer, "saved filePath : " + filePath, font, &textPlace, Constants::TEXT_COLOR);
+						SDL_Delay(5000);
+						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
+						SDL_RenderClear(renderer);
 						mainMenu.draw(renderer, font);
 						mainMenu.enableAllButtons();
 						paletteMenu.disableMenu();
@@ -167,61 +179,75 @@ int main(int argc, char* args[]) {
 						menuState = Constants::mainMenu;
 					} else if(imageInfosMenu->isAnyImageButtonPressed(&event)) {
 						menuState = Constants::showingImage;
-						Ox *ox = new Ox(Converter::convertImageToOxRawColors(loadedImage));
-						Constants::imageDrawType drawType = imageInfosMenu->getImageDrawType();
-						switch(drawType) {
-						case Constants::original:
-							try {
-								screenHandler->drawImage(loadedImage, 0, 0);
-								SDL_UpdateWindowSurface(window);
-								break;
-							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptionHandle(renderer, font);
-							}
-						case Constants::rawColors:
-							try {
-								screenHandler->drawOx(ox, 0, 0);
-								SDL_UpdateWindowSurface(window);
-								break;
-							}
-							catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptionHandle(renderer, font);
-							}
-						case Constants::dedicatedPalette:
-							try {
-								ox->setDedicatedPalette(loadedImage);
-								screenHandler->drawOxFromPalette(ox, 0, 0);
-								SDL_UpdateWindowSurface(window);
-								break;
-							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptionHandle(renderer, font);
-							}
-						case Constants::greyScale:
-							try {
-								screenHandler->drawPixels(Converter::createGreyScalePixels(loadedImage), 0, 0);
-								SDL_UpdateWindowSurface(window);
-								break;
-							}
-							catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptionHandle(renderer, font);
-							}
-						case Constants::bwDithering:
-							try {
-								screenHandler->drawPixels(ditheringGreyScale(Converter::createGreyScalePixels(loadedImage)), 0, 0);
-								SDL_UpdateWindowSurface(window);
-								break;
-							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptionHandle(renderer, font); 
-							}
-						case Constants::dedicatedDithering:
-							try {
-								ox->setDedicatedPalette(loadedImage);
-								ox->paletteIndexes = ditheringColor(loadedImage->getPixelMap(), *ox);
-								screenHandler->drawOxFromPalette(ox, 0, 0);
-								SDL_UpdateWindowSurface(window);
-								break;
-							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
-								tooSmallSurfaceExceptionHandle(renderer, font);
+						if(loadedImage->getWidth() > Constants::WIDTH || loadedImage->getHeight() > Constants::HEIGHT) {
+							tooSmallSurfaceExceptionHandle(renderer, font);
+						} else {
+							Ox *ox = new Ox(Converter::convertImageToOxRawColors(loadedImage));
+							Constants::imageDrawType drawType = imageInfosMenu->getImageDrawType();
+							switch (drawType) {
+							case Constants::original:
+								try {
+									screenHandler->drawImage(loadedImage, 0, 0);
+									SDL_UpdateWindowSurface(window);
+									break;
+								}
+								catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+									tooSmallSurfaceExceptionHandle(renderer, font);
+									break;
+								}
+							case Constants::rawColors:
+								try {
+									screenHandler->drawOx(ox, 0, 0);
+									SDL_UpdateWindowSurface(window);
+									break;
+								}
+								catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+									tooSmallSurfaceExceptionHandle(renderer, font);
+									break;
+								}
+							case Constants::dedicatedPalette:
+								try {
+									ox->setDedicatedPalette(loadedImage);
+									screenHandler->drawOxFromPalette(ox, 0, 0);
+									SDL_UpdateWindowSurface(window);
+									break;
+								}
+								catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+									tooSmallSurfaceExceptionHandle(renderer, font);
+									break;
+								}
+							case Constants::greyScale:
+								try {
+									screenHandler->drawPixels(Converter::createGreyScalePixels(loadedImage), 0, 0);
+									SDL_UpdateWindowSurface(window);
+									break;
+								}
+								catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+									tooSmallSurfaceExceptionHandle(renderer, font);
+									break;
+								}
+							case Constants::bwDithering:
+								try {
+									screenHandler->drawPixels(ditheringGreyScale(Converter::createGreyScalePixels(loadedImage)), 0, 0);
+									SDL_UpdateWindowSurface(window);
+									break;
+								}
+								catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+									tooSmallSurfaceExceptionHandle(renderer, font);
+									break;
+								}
+							case Constants::dedicatedDithering:
+								try {
+									ox->setDedicatedPalette(loadedImage);
+									ox->paletteIndexes = ditheringColor(loadedImage->getPixelMap(), *ox);
+									screenHandler->drawOxFromPalette(ox, 0, 0);
+									SDL_UpdateWindowSurface(window);
+									break;
+								}
+								catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+									tooSmallSurfaceExceptionHandle(renderer, font);
+									break;
+								}
 							}
 						}
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
@@ -238,7 +264,7 @@ int main(int argc, char* args[]) {
 								screenHandler->drawOxFromPalette(loadedOx, 0, 0);
 							SDL_UpdateWindowSurface(window);
 							menuState == Constants::showingImageOxMenu;
-						} else if(oxMenu.getMenuState() == Constants::compressAndSave) {
+						} else if(oxMenu.getMenuState() == Constants::convertAndSaveOxMenu) {
 							// TODO:: save it to bmp I dont know how
 							oxMenu.enableAllButtons();
 							oxMenu.draw(renderer, font);
