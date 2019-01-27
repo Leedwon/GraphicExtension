@@ -97,6 +97,12 @@ int main(int argc, char* args[]) {
 					menuState = Constants::mainMenu;
 				} else if(extension == Constants::fileExtension::ox) {
 					loadedOx = OxFileIO::readOx(dropped_filedir);
+
+					/*to bmp*/
+
+					SDL_Surface * bmpSurface = SDL_CreateRGBSurfaceFrom(loadedOx->getPixelsForBmp(), loadedOx->width, loadedOx->height, 24, loadedOx->width * 4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+					SDL_SaveBMP(bmpSurface, "plik.bmp");
+					/*to bmp*/
 					SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 					SDL_RenderClear(renderer);
 					oxMenu.draw(renderer, font);
