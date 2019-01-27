@@ -139,7 +139,6 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Ox.cpp" />
     <ClCompile Include="OxFileIO.cpp" />
-
     <ClCompile Include="PaletteMenu.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SurfaceHandler.cpp" />
@@ -161,7 +160,6 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Ox.h" />
     <ClInclude Include="OxFileIO.h" />
-
     <ClInclude Include="PaletteMenu.h" />
     <ClInclude Include="SurfaceHandler.h" />
     <ClInclude Include="Utilities.h" />

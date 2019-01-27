@@ -113,6 +113,5 @@
     <ClInclude Include="OxFileIO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-
   </ItemGroup>
 </Project>
