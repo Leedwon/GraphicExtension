@@ -51,13 +51,26 @@ Ox* OxFileIO::readOx(std::string fileName)
 				decompressedPixels = Decompressor::decopressByteRun(compressedPixels);
 				break;
 			}
-			ox->pixels.resize(ox->height);
-			for (int i = 0; i < ox->height; i++)
-			{
-				ox->pixels[i].resize(ox->width);
-				for (int j = 0; j < ox->width; j++)
+			if (ox->paletteType == Constants::dedicated || ox->paletteType == Constants::dedicatedDith || ox->paletteType == Constants::imposed) {
+				ox->paletteIndexes.resize(ox->height);
+				for (int i = 0; i < ox->height; i++)
 				{
-					ox->pixels[i][j] = decompressedPixels[i*ox->width + j];
+					ox->paletteIndexes[i].resize(ox->width);
+					for (int j = 0; j < ox->width; j++)
+					{
+						ox->paletteIndexes[i][j] = decompressedPixels[i*ox->width + j];
+					}
+				}
+			} else
+			{
+				ox->pixels.resize(ox->height);
+				for (int i = 0; i < ox->height; i++)
+				{
+					ox->pixels[i].resize(ox->width);
+					for (int j = 0; j < ox->width; j++)
+					{
+						ox->pixels[i][j] = decompressedPixels[i*ox->width + j];
+					}
 				}
 			}
 	}catch (std::exception& e)
