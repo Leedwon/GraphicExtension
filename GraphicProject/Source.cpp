@@ -89,6 +89,7 @@ int main(int argc, char* args[]) {
 				if (extension == Constants::fileExtension::bmp) {
 					loadedImage = new Image(dropped_filedir);
 					imageInfosMenu = new ImageInfosMenu(loadedImage);
+					SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 					SDL_RenderClear(renderer);
 					mainMenu.draw(renderer, font);
 					mainMenu.enableAllButtons();
@@ -96,11 +97,13 @@ int main(int argc, char* args[]) {
 					menuState = Constants::mainMenu;
 				} else if(extension == Constants::fileExtension::ox) {
 					loadedOx = OxFileIO::readOx(dropped_filedir);
+					SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 					SDL_RenderClear(renderer);
 					oxMenu.draw(renderer, font);
 					oxMenu.enableAllButtons();
 					menuState = Constants::oxMenu;
 				} else {
+					SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 					SDL_RenderClear(renderer);
 					SDL_Rect textPlace{ Constants::WIDTH / 2 - 240, 0, 480, 120 };
 					renderText(renderer, Constants::WRONG_FILE_EXTENSION, font, &textPlace, Constants::TEXT_COLOR);
