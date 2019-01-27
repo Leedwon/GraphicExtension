@@ -9,10 +9,7 @@ Ox* OxFileIO::readOx(std::string fileName)
 	Ox *ox = new Ox();
 	try
 	{
-		char signature[Constants::SIGNATURE_SIZE];
-		is >> signature;
-		if (strcmp(signature, "OX") == 0)
-		{
+
 			uint32_t size;
 			uint32_t offsetToPixels;
 			uint8_t compressionType;
@@ -60,7 +57,6 @@ Ox* OxFileIO::readOx(std::string fileName)
 					ox->pixels[i][j] = decompressedPixels[i*ox->width + j];
 				}
 			}
-		}
 	}catch (std::exception& e)
 	{
 		
