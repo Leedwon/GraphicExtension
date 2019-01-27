@@ -21,6 +21,7 @@ bool Compressor::areThreeInRowSame(const std::vector<std::vector<Constants::oxPi
 	return true;
 }
 
+
 void Compressor::addSequenceOfDifferentSymbols(std::vector<uint8_t> &buffer, std::vector<uint8_t> &destination) {
 	destination.push_back(0); // inform that we will be copying next buffer.size() amount of bits
 	destination.push_back(static_cast<uint8_t>(buffer.size())); // how many to copy
