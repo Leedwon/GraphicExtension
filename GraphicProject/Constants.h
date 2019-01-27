@@ -10,8 +10,8 @@ public:
 	typedef uint8_t oxPixel; 
 	enum paletteType { none, dedicated, grey, imposed, bwDith, dedicatedDith };
 	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage};
-	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering};
 	enum fileExtension {bmp, ox, notKnow};
+	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering, dedicatedDithering};
 
     /*dimension consts*/
 	static const int PADDING = 24;
@@ -47,6 +47,7 @@ public:
 	static const std::string BUTTON_IMAGE_DEDICATED;
 	static const std::string BUTTON_IMAGE_GREY;
 	static const std::string BUTTON_IMAGE_BW_DITHERING;
+	static const std::string BUTTON_IMAGE_DEDICATED_DITHERING;
 	static const std::string BUTTON_BACK;
 	static const std::string EXCEPTION_TOO_SMALL_SURFACE;
 	static const std::string APP_NAME;

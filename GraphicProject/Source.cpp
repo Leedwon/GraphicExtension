@@ -170,6 +170,16 @@ int main(int argc, char* args[]) {
 							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
 								tooSmallSurfaceExceptionHandle(renderer, font); 
 							}
+						case Constants::dedicatedDithering:
+							try {
+								ox->setDedicatedPalette(image);
+								ox->paletteIndexes = ditheringColor(image->getPixelMap(), *ox);
+								screenHandler->drawOxFromPalette(ox, 0, 0);
+								SDL_UpdateWindowSurface(window);
+								break;
+							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+								tooSmallSurfaceExceptionHandle(renderer, font);
+							}
 						}
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
