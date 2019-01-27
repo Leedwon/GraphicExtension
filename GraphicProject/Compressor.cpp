@@ -73,6 +73,7 @@ std::vector<uint8_t> Compressor::compressRle(const std::vector<std::vector<Const
 					buffer.clear();
 					sameCount = 1;
 				}
+				sameCount = 1;
 			} else if (buffer.size() > 0) {
 				addSequenceOfDifferentSymbols(buffer, compressed);
 			}
@@ -108,7 +109,7 @@ std::vector<uint8_t> Compressor::compressByteRun(const std::vector<std::vector<C
 	std::vector<uint8_t> buffer;
 	uint8_t previous = pixels[0][0]; // take first pixel
 	uint8_t current=pixels[0][0];
-	uint8_t how_many_same = 0;
+	uint8_t how_many_same = -1;
 	uint8_t how_many_diff = 0;
 	uint8_t last_same;
 	for (int y = 0; y < pixels.size(); ++y) {
@@ -223,8 +224,8 @@ Compressor::CompressedData Compressor::compress(const std::vector<std::vector<Co
 		result.pixels = compressed_rle;
 		result.compressionType = Constants::rle;
 	} else {
-		result.pixels = compressed_byterun;
-		result.compressionType = Constants::byteRun;
+		result.pixels = compressed_rle;
+		result.compressionType = Constants::rle;
 	}
 	return result;
 }

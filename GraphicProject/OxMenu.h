@@ -7,7 +7,7 @@ public:
 	Button buttonShowOx;
 	Button buttonConvertToBmpAndSave;
 	OxMenu() : buttonShowOx(Constants::WIDTH / 2 - Constants::BUTTON_WIDTH / 2, 0, Constants::BUTTON_WIDTH,
-	                        Constants::BUTTON_HEIGHT, Constants::BUTTON_CONVERT_TO_BMP_AND_SAVE),
+	                        Constants::BUTTON_HEIGHT, Constants::BUTTON_SHOW_OX),
 	                 buttonConvertToBmpAndSave(Constants::WIDTH / 2 - Constants::BUTTON_WIDTH / 2, Constants::BUTTON_HEIGHT,
 	                                     Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT,
 	                                     Constants::BUTTON_CONVERT_TO_BMP_AND_SAVE) {

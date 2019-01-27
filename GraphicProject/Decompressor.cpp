@@ -78,7 +78,7 @@ std::vector<uint8_t> Decompressor::decopressByteRun(const std::vector<uint8_t> &
 
 			++posInVector; //Advance to next data chunk
 
-			if (posInVector > compressedPixelData.size())
+			if (posInVector >= compressedPixelData.size())
 			{
 				break;
 			}
@@ -97,7 +97,7 @@ std::vector<uint8_t> Decompressor::decopressByteRun(const std::vector<uint8_t> &
 
 			++posInVector; //Advance to next data chunk
 
-			if (posInVector > compressedPixelData.size())
+			if (posInVector >= compressedPixelData.size())
 			{
 				break;
 			}

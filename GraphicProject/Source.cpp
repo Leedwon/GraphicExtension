@@ -5,7 +5,6 @@
 #include "Compressor.h"
 #include "Ox.h"
 #include "Converter.h"
-#include "Button.h"
 #include "Utilities.h"
 #include "MainMenu.h"
 #include "PaletteMenu.h"
@@ -14,6 +13,7 @@
 #include "OxFileIO.h"
 #include "Decompressor.h"
 #include "OxMenu.h"
+#include "Constants.h"
 
 int main(int argc, char* args[]) {
 	SDL_Window* window;
@@ -135,7 +135,7 @@ int main(int argc, char* args[]) {
 					if (paletteMenu.checkForPresses(&event)) {
 						Ox *ox = new Ox(Converter::convertImageToOxRawColors(loadedImage));
 						// when any pressed get palette and navigation to main menu
-						palette = paletteMenu.getPressedPalette();
+						palette = paletteMenu.getPaletteType();
 						ox->paletteType = palette;
 						switch (palette) {
 						case Constants::dedicated:
@@ -152,6 +152,27 @@ int main(int argc, char* args[]) {
 							ox->paletteIndexes = ditheringColor(loadedImage->getPixelMap(),*ox);
 							break;
 						}
+						//std::vector<Constants::oxPixel> temp = Compressor::compressRle(ox->pixels);
+						//std::vector<Constants::oxPixel> temp2 = Decompressor::decompressRLE(temp);
+						std::vector<Constants::oxPixel> temp = Compressor::compressByteRun(ox->pixels);
+						std::vector<Constants::oxPixel> temp2 = Decompressor::decopressByteRun(temp);
+						//temp = Decompressor::decopressByteRun(temp);
+						for (int i = 0; i < ox->height; i++)
+						{
+							for (int j = 0; j < ox->width; j++)
+							{
+								ox->pixels[i][j] = temp2[i*ox->width + j];
+							}
+						}
+						for(int i = 0; i < ox->height; i++) {
+							for (int j = 0; j < ox->width; j++) {
+								SDL_Color c = Converter::oxPixelToSdlColor(temp2[i*ox->width + j]);
+								screenHandler->setPixel(j, i, c);
+							}
+						}
+						SDL_UpdateWindowSurface(window);
+						screenHandler->drawOx(ox, 0, 0);
+						SDL_UpdateWindowSurface(window);
 						std::string filePath = getFilenameWithoutExtension(loadedImage->getFilePath());
 						filePath += ".ox";
 						OxFileIO::saveOx(filePath, ox);
@@ -262,10 +283,12 @@ int main(int argc, char* args[]) {
 				case(Constants::oxMenu):
 					if(oxMenu.checkForPresses(&event)) {
 						if(oxMenu.getMenuState() == Constants::showingImageOxMenu) {
-							if (loadedOx->paletteType != Constants::dedicated)
-								screenHandler->drawOx(loadedOx, 0, 0);
-							else
+							if (loadedOx->paletteType == Constants::dedicated)
 								screenHandler->drawOxFromPalette(loadedOx, 0, 0);
+							else if (loadedOx->paletteType == Constants::grey)
+								screenHandler->drawPixels(loadedOx->pixels, 0, 0);
+							else
+								screenHandler->drawOx(loadedOx, 0, 0);
 							SDL_UpdateWindowSurface(window);
 							menuState == Constants::showingImageOxMenu;
 						} else if(oxMenu.getMenuState() == Constants::convertAndSaveOxMenu) {
@@ -277,7 +300,7 @@ int main(int argc, char* args[]) {
 					}
 				}
 			case (SDL_KEYDOWN):
-				if(menuState == Constants::showingImage || menuState == Constants::paletteMenu) {
+				if(menuState == Constants::showingImage || menuState == Constants::paletteMenu || menuState == Constants::showingImageOxMenu) {
 					if (event.key.keysym.sym == SDLK_ESCAPE) {
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);

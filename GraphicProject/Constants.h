@@ -12,7 +12,7 @@ public:
 	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage, showingImageOxMenu, convertAndSaveOxMenu, oxMenu };
 	enum fileExtension {bmp, ox, notKnown};
 	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering, dedicatedDithering};
-	enum compressionType {byteRun, rle};
+	enum compressionType {rle, byteRun};
 
     /*dimension consts*/
 	static const int PADDING = 24;
