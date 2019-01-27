@@ -147,6 +147,10 @@ int main(int argc, char* args[]) {
 						case Constants::bwDith:
 							ox->pixels = ditheringGreyScale(Converter::createGreyScalePixels(loadedImage));
 							break;
+						case Constants::dedicatedDith:
+							ox->setDedicatedPalette(loadedImage);
+							ox->paletteIndexes = ditheringColor(loadedImage->getPixelMap(),*ox);
+							break;
 						}
 						std::string filePath = getFilenameWithoutExtension(loadedImage->getFilePath());
 						filePath += ".ox";
