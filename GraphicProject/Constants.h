@@ -11,6 +11,7 @@ public:
 	enum paletteType { none, dedicated, grey, imposed, bwDith, dedicatedDith };
 	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage};
 	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering};
+	enum fileExtension {bmp, ox, notKnow};
 
     /*dimension consts*/
 	static const int PADDING = 24;
