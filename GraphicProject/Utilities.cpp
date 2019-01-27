@@ -165,9 +165,9 @@ std::vector<std::vector<uint8_t>> ditheringColor(const std::vector<std::vector<S
 	int i;
 
 	//Pixels are analyzed left to right, top to bottom
-	for (int y = 0; y < height; ++y)
+	for (int x = 0; x < width; ++x)
 	{
-		for (int x = 0; x < width; ++x)
+		for (int y = 0; y < height; ++y)
 		{
 			currentPixelValue = pixelMap[y][x];
 
@@ -175,7 +175,7 @@ std::vector<std::vector<uint8_t>> ditheringColor(const std::vector<std::vector<S
 			closestColor = static_cast<unsigned long long int>(
 				(currentPixelValue.r + errorDataRed[y][x + shift] - targetImage.colorPalette[0].r)*(currentPixelValue.r + errorDataRed[y][x + shift] - targetImage.colorPalette[0].r)
 				+ (currentPixelValue.g + errorDataGreen[y][x + shift] - targetImage.colorPalette[0].g)*(currentPixelValue.g + errorDataGreen[y][x + shift] - targetImage.colorPalette[0].g)
-				+ (currentPixelValue.b + errorDataBlue[y][x + shift] - targetImage.colorPalette[0].b)*(currentPixelValue.b + errorDataBlue[y][x + shift] - targetImage.colorPalette[0].b) );
+				+ (currentPixelValue.b + errorDataBlue[y][x + shift] - targetImage.colorPalette[0].b)*(currentPixelValue.b + errorDataBlue[y][x + shift] - targetImage.colorPalette[0].b));
 
 			i = 0;
 
@@ -185,7 +185,7 @@ std::vector<std::vector<uint8_t>> ditheringColor(const std::vector<std::vector<S
 				currentClosestColor = static_cast<unsigned long long int>(
 					(currentPixelValue.r + errorDataRed[y][x + shift] - targetImage.colorPalette[i].r)*(currentPixelValue.r + errorDataRed[y][x + shift] - targetImage.colorPalette[i].r)
 					+ (currentPixelValue.g + errorDataGreen[y][x + shift] - targetImage.colorPalette[i].g)*(currentPixelValue.g + errorDataGreen[y][x + shift] - targetImage.colorPalette[i].g)
-					+ (currentPixelValue.b + errorDataBlue[y][x + shift] - targetImage.colorPalette[i].b)*(currentPixelValue.b + errorDataBlue[y][x + shift] - targetImage.colorPalette[i].b) );
+					+ (currentPixelValue.b + errorDataBlue[y][x + shift] - targetImage.colorPalette[i].b)*(currentPixelValue.b + errorDataBlue[y][x + shift] - targetImage.colorPalette[i].b));
 
 				//If so set the closer color as current closest and save it's index
 				if (currentClosestColor < closestColor)
