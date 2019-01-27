@@ -12,6 +12,7 @@ public:
 	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage};
 	enum fileExtension {bmp, ox, notKnown};
 	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering, dedicatedDithering};
+	enum compressionType {byteRun, rle};
 
     /*dimension consts*/
 	static const int PADDING = 24;
@@ -20,7 +21,7 @@ public:
 	static const int WIDTH = 1080;
 	static const int HEIGHT = 960;
 
-	/*compression type*/
+	/*compression type delete later*/
 	static const int COMPRESSION_RLE = 0;
 	static const int COMPRESSION_BYTE_RUN = 1;
 

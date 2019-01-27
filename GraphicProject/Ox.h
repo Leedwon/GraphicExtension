@@ -7,6 +7,7 @@
 
 class Ox {
 public:
+	Constants::compressionType compressionType;
 	Constants::paletteType paletteType;
 	unsigned int width;
 	unsigned int height;

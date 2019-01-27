@@ -12,6 +12,7 @@
 #include "ImageInfosMenu.h"
 #include <allocators>
 #include "OxFileIO.h"
+#include "Decompressor.h"
 
 int main(int argc, char* args[]) {
 	SDL_Window* window;

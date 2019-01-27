@@ -77,8 +77,9 @@ bool OxFileIO::saveOx(std::string fileName, Ox *ox)
 	}
 	try
 	{
-		std::vector<uint8_t> compressedPixels = Compressor::compress(ox->pixels);
-		uint8_t compressionType = Constants::COMPRESSION_RLE; //dunno how get it;
+	Compressor:Compressor::CompressedData compressedData = Compressor::compress(ox->pixels);
+		std::vector<uint8_t> compressedPixels = compressedData.pixels;
+		uint8_t compressionType = compressedData.compressionType;
 		Header header(ox, compressedPixels.size(), compressionType);
 		os << header.fileHeader.signature;
 		os << header.fileHeader.size;
