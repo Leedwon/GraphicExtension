@@ -20,5 +20,6 @@ public:
 	//Getters & Setters
 	int getWidth();
 	int getHeight();
+	std::vector<std::vector<SDL_Color>> getPixelMap() { return pixelMap; }
 	std::string getFilePath() {return filePath; }
 };

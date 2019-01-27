@@ -17,6 +17,7 @@ const std::string Constants::BUTTON_IMAGE_RAW = "show in raw colors ";
 const std::string Constants::BUTTON_IMAGE_DEDICATED = "show with dedicated palette (256 shades)";
 const std::string Constants::BUTTON_IMAGE_GREY = "show in grey (256 shades)";
 const std::string Constants::BUTTON_IMAGE_BW_DITHERING = "show with black white dithering";
+const std::string Constants::BUTTON_IMAGE_DEDICATED_DITHERING = "show with dedicated palette + dithering";
 const std::string Constants::EXCEPTION_TOO_SMALL_SURFACE = "too small surface, press esc to back to main menu";
 const SDL_Color Constants::BUTTON_BACKGROUND = { 102, 0, 102, 1};
 const SDL_Color Constants::BUTTON_FRAME = { 0, 255, 0, 1};
