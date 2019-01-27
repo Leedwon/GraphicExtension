@@ -288,7 +288,7 @@ int main(int argc, char* args[]) {
 								screenHandler->drawOxFromPalette(loadedOx, 0, 0);
 							}
 							else
-								screenHandler->drawOx(loadedOx, 0, 0);
+							screenHandler->drawOx(loadedOx, 0, 0);
 							menuState = Constants::showingImageOxMenu;
 							SDL_UpdateWindowSurface(window);		
 						} else if(oxMenu.getMenuState() == Constants::convertAndSaveOxMenu) {
