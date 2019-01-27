@@ -63,6 +63,9 @@
     <ClCompile Include="OxFileIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OxMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -111,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OxFileIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OxMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

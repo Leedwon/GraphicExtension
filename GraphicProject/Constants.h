@@ -9,7 +9,7 @@ private:
 public:
 	typedef uint8_t oxPixel; 
 	enum paletteType { none, dedicated, grey, imposed, bwDith, dedicatedDith };
-	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage};
+	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage, showingImageOxMenu, convertAndSaveOxMenu, oxMenu };
 	enum fileExtension {bmp, ox, notKnown};
 	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering, dedicatedDithering};
 	enum compressionType {byteRun, rle};
@@ -49,6 +49,8 @@ public:
 	static const std::string BUTTON_IMAGE_GREY;
 	static const std::string BUTTON_IMAGE_BW_DITHERING;
 	static const std::string BUTTON_IMAGE_DEDICATED_DITHERING;
+	static const std::string BUTTON_CONVERT_TO_BMP_AND_SAVE;
+	static const std::string BUTTON_SHOW_OX;
 	static const std::string BUTTON_BACK;
 	static const std::string EXCEPTION_TOO_SMALL_SURFACE;
 	static const std::string WRONG_FILE_EXTENSION;

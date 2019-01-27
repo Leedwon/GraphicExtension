@@ -13,18 +13,31 @@
 #include <allocators>
 #include "OxFileIO.h"
 #include "Decompressor.h"
+#include "OxMenu.h"
 
 int main(int argc, char* args[]) {
 	SDL_Window* window;
 	SDL_Surface* screenSurface;
 	SurfaceHandler* screenHandler;
 	SDL_Event event; // Declare event handle
+
 	char* dropped_filedir = nullptr; // Pointer for directory of dropped file
-	Image* image = nullptr;
+	Image* loadedImage = nullptr;
 	Ox *loadedOx = nullptr;
+	
+	MainMenu mainMenu;
+	mainMenu.disableMenu();
+	PaletteMenu paletteMenu;
+	paletteMenu.disableMenu();
+	OxMenu oxMenu;
+	oxMenu.disableMenu();
+	ImageInfosMenu *imageInfosMenu = nullptr;
+
 	Constants::fileExtension extension;
 	Constants::paletteType palette;
 	Constants::menuState menuState = Constants::dropFileState;
+
+
 	bool fileDropped = false;
 	SDL_Init(SDL_INIT_VIDEO); // SDL2 initialization
 	TTF_Init();
@@ -56,15 +69,11 @@ int main(int argc, char* args[]) {
 	SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 255, 255, 255));
 	SDL_UpdateWindowSurface(window);
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
-	SDL_bool done = SDL_FALSE;
-	MainMenu mainMenu;
-	PaletteMenu paletteMenu;
-	ImageInfosMenu *imageInfosMenu = nullptr;
 	SDL_Rect textPlace{ Constants::WIDTH / 2 - 240, 0, 480, 120 };
 	renderText(renderer, "Please drag and drop file that you want to work on", font, &textPlace, Constants::TEXT_COLOR);
 	textPlace.y += Constants::BUTTON_HEIGHT;
 	renderText(renderer, "Loading file can take a while, sorry", font, &textPlace, Constants::TEXT_COLOR);
-
+	SDL_bool done = SDL_FALSE;
 	while (!done) {
 		// Program loop
 		while (!done && SDL_PollEvent(&event)) {
@@ -78,8 +87,8 @@ int main(int argc, char* args[]) {
 				dropped_filedir = event.drop.file;
 				extension = checkForFileExtension(dropped_filedir);
 				if (extension == Constants::fileExtension::bmp) {
-					image = new Image(dropped_filedir);
-					imageInfosMenu = new ImageInfosMenu(image);
+					loadedImage = new Image(dropped_filedir);
+					imageInfosMenu = new ImageInfosMenu(loadedImage);
 					SDL_RenderClear(renderer);
 					mainMenu.draw(renderer, font);
 					mainMenu.enableAllButtons();
@@ -87,6 +96,10 @@ int main(int argc, char* args[]) {
 					menuState = Constants::mainMenu;
 				} else if(extension == Constants::fileExtension::ox) {
 					loadedOx = OxFileIO::readOx(dropped_filedir);
+					SDL_RenderClear(renderer);
+					oxMenu.draw(renderer, font);
+					oxMenu.enableAllButtons();
+					menuState = Constants::oxMenu;
 				} else {
 					SDL_RenderClear(renderer);
 					SDL_Rect textPlace{ Constants::WIDTH / 2 - 240, 0, 480, 120 };
@@ -117,22 +130,22 @@ int main(int argc, char* args[]) {
 					break;
 				case(Constants::paletteMenu):
 					if (paletteMenu.checkForPresses(&event)) {
-						Ox *ox = new Ox(Converter::convertImageToOxRawColors(image));
+						Ox *ox = new Ox(Converter::convertImageToOxRawColors(loadedImage));
 						// when any pressed get palette and navigation to main menu
 						palette = paletteMenu.getPressedPalette();
 						ox->paletteType = palette;
 						switch (palette) {
 						case Constants::dedicated:
-							ox->setDedicatedPalette(image);
+							ox->setDedicatedPalette(loadedImage);
 							break;
 						case Constants::grey:
-							ox->pixels = Converter::createGreyScalePixels(image);
+							ox->pixels = Converter::createGreyScalePixels(loadedImage);
 							break;
 						case Constants::bwDith:
-							ox->pixels = ditheringGreyScale(Converter::createGreyScalePixels(image));
+							ox->pixels = ditheringGreyScale(Converter::createGreyScalePixels(loadedImage));
 							break;
 						}
-						std::string filePath = getFilenameWithoutExtension(image->getFilePath());
+						std::string filePath = getFilenameWithoutExtension(loadedImage->getFilePath());
 						filePath += ".ox";
 						OxFileIO::saveOx(filePath, ox);
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
@@ -154,12 +167,12 @@ int main(int argc, char* args[]) {
 						menuState = Constants::mainMenu;
 					} else if(imageInfosMenu->isAnyImageButtonPressed(&event)) {
 						menuState = Constants::showingImage;
-						Ox *ox = new Ox(Converter::convertImageToOxRawColors(image));
+						Ox *ox = new Ox(Converter::convertImageToOxRawColors(loadedImage));
 						Constants::imageDrawType drawType = imageInfosMenu->getImageDrawType();
 						switch(drawType) {
 						case Constants::original:
 							try {
-								screenHandler->drawImage(image, 0, 0);
+								screenHandler->drawImage(loadedImage, 0, 0);
 								SDL_UpdateWindowSurface(window);
 								break;
 							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
@@ -176,7 +189,7 @@ int main(int argc, char* args[]) {
 							}
 						case Constants::dedicatedPalette:
 							try {
-								ox->setDedicatedPalette(image);
+								ox->setDedicatedPalette(loadedImage);
 								screenHandler->drawOxFromPalette(ox, 0, 0);
 								SDL_UpdateWindowSurface(window);
 								break;
@@ -185,7 +198,7 @@ int main(int argc, char* args[]) {
 							}
 						case Constants::greyScale:
 							try {
-								screenHandler->drawPixels(Converter::createGreyScalePixels(image), 0, 0);
+								screenHandler->drawPixels(Converter::createGreyScalePixels(loadedImage), 0, 0);
 								SDL_UpdateWindowSurface(window);
 								break;
 							}
@@ -194,7 +207,7 @@ int main(int argc, char* args[]) {
 							}
 						case Constants::bwDithering:
 							try {
-								screenHandler->drawPixels(ditheringGreyScale(Converter::createGreyScalePixels(image)), 0, 0);
+								screenHandler->drawPixels(ditheringGreyScale(Converter::createGreyScalePixels(loadedImage)), 0, 0);
 								SDL_UpdateWindowSurface(window);
 								break;
 							} catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
@@ -202,8 +215,8 @@ int main(int argc, char* args[]) {
 							}
 						case Constants::dedicatedDithering:
 							try {
-								ox->setDedicatedPalette(image);
-								ox->paletteIndexes = ditheringColor(image->getPixelMap(), *ox);
+								ox->setDedicatedPalette(loadedImage);
+								ox->paletteIndexes = ditheringColor(loadedImage->getPixelMap(), *ox);
 								screenHandler->drawOxFromPalette(ox, 0, 0);
 								SDL_UpdateWindowSurface(window);
 								break;
@@ -216,15 +229,37 @@ int main(int argc, char* args[]) {
 						imageInfosMenu->disableMenu();
 					}
 					break;
+				case(Constants::oxMenu):
+					if(oxMenu.checkForPresses(&event)) {
+						if(oxMenu.getMenuState() == Constants::showingImageOxMenu) {
+							if (loadedOx->paletteType != Constants::dedicated)
+								screenHandler->drawOx(loadedOx, 0, 0);
+							else
+								screenHandler->drawOxFromPalette(loadedOx, 0, 0);
+							SDL_UpdateWindowSurface(window);
+							menuState == Constants::showingImageOxMenu;
+						} else if(oxMenu.getMenuState() == Constants::compressAndSave) {
+							// TODO:: save it to bmp I dont know how
+							oxMenu.enableAllButtons();
+							oxMenu.draw(renderer, font);
+							menuState = Constants::oxMenu;
+						}
+					}
 				}
 			case (SDL_KEYDOWN):
 				if(menuState == Constants::showingImage || menuState == Constants::paletteMenu) {
 					if (event.key.keysym.sym == SDLK_ESCAPE) {
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
+						if (menuState == Constants::showingImageOxMenu) {
+							oxMenu.enableAllButtons();
+							oxMenu.draw(renderer, font);
+							menuState = Constants::oxMenu;
+						} else {
 						mainMenu.enableAllButtons();
 						mainMenu.draw(renderer, font);
 						menuState = Constants::mainMenu;
+					}
 					}
 				}
 				break;
