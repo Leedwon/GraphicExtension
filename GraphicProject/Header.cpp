@@ -56,6 +56,7 @@ Header::Header(Ox *ox, uint32_t sizeOfCompressedPixels, uint8_t compressionType)
 	//+pallete
 	switch(ox->paletteType) {
 	case Constants::paletteType::dedicated:
+	case Constants::paletteType::dedicatedDith:
 		offset += Constants::PALETTE_SIZE * sizeof(uint8_t) * 3;
 		break;
 	}
