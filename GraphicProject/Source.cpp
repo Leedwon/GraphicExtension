@@ -74,6 +74,8 @@ int main(int argc, char* args[]) {
 	textPlace.y += Constants::BUTTON_HEIGHT;
 	renderText(renderer, "Loading file can take a while, sorry", font, &textPlace, Constants::TEXT_COLOR);
 	SDL_bool done = SDL_FALSE;
+	//refactor later
+	std::string filePathForOxSave;
 	while (!done) {
 		// Program loop
 		while (!done && SDL_PollEvent(&event)) {
@@ -85,6 +87,7 @@ int main(int argc, char* args[]) {
 
 			case (SDL_DROPFILE):
 				dropped_filedir = event.drop.file;
+				filePathForOxSave = dropped_filedir;
 				extension = checkForFileExtension(dropped_filedir);
 				if (extension == Constants::fileExtension::bmp) {
 					loadedImage = new Image(dropped_filedir);
@@ -97,12 +100,6 @@ int main(int argc, char* args[]) {
 					menuState = Constants::mainMenu;
 				} else if(extension == Constants::fileExtension::ox) {
 					loadedOx = OxFileIO::readOx(dropped_filedir);
-
-					/*to bmp*/
-
-					SDL_Surface * bmpSurface = SDL_CreateRGBSurfaceFrom(loadedOx->getPixelsForBmp(), loadedOx->width, loadedOx->height, 24, loadedOx->width * 4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
-					SDL_SaveBMP(bmpSurface, "plik.bmp");
-					/*to bmp*/
 					SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 					SDL_RenderClear(renderer);
 					oxMenu.draw(renderer, font);
@@ -295,7 +292,10 @@ int main(int argc, char* args[]) {
 							menuState = Constants::showingImageOxMenu;
 							SDL_UpdateWindowSurface(window);		
 						} else if(oxMenu.getMenuState() == Constants::convertAndSaveOxMenu) {
-							// TODO:: save it to bmp I dont know how
+							SDL_Surface * bmpSurface = SDL_CreateRGBSurfaceFrom(loadedOx->getPixelsForBmp(), loadedOx->width, loadedOx->height, 24, loadedOx->width * 4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+							std::string filePath = getFilenameWithoutExtension(filePathForOxSave);
+							filePath += "(createdFromConverter).bmp";
+							SDL_SaveBMP(bmpSurface, filePath.c_str());
 							oxMenu.enableAllButtons();
 							oxMenu.draw(renderer, font);
 							menuState = Constants::oxMenu;

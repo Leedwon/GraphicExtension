@@ -80,7 +80,7 @@ Uint32* Ox::getPixelsForBmp()
 			}
 		}
 
-	} else if(paletteType == Constants::bwDith)
+	} else if(paletteType == Constants::bwDith || paletteType == Constants::grey)
 	{
 		for (int i = 0; i < height; ++i)
 		{
