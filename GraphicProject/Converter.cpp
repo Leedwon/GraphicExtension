@@ -316,7 +316,4 @@ std::array<SDL_Color, Constants::PALETTE_SIZE> Converter::createImposedPalette()
 
 
 	return palette;
-
-
-
 }
