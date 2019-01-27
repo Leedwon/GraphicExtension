@@ -243,3 +243,25 @@ void tooSmallSurfaceExceptionHandle(SDL_Renderer* renderer, TTF_Font* font) {
 	SDL_Rect exceptionRect{ 0, 0, Constants::WIDTH, Constants::BUTTON_HEIGHT };
 	renderText(renderer, Constants::EXCEPTION_TOO_SMALL_SURFACE, font, &exceptionRect, { 255, 255, 255, 1 });
 }
+
+std::string getFilenameWithoutExtension(const std::string& str) {
+	size_t lastindex = str.find_last_of(".");
+	return str.substr(0, lastindex);
+}
+
+Constants::fileExtension checkForFileExtension(std::string fileName)
+{
+	std::ifstream ifs("fileName");
+	char signature[Constants::SIGNATURE_SIZE];
+	ifs >> signature;
+	ifs.close();
+	if(strcmp(signature, "BM") == 0)
+	{
+		return Constants::fileExtension::bmp;
+	}
+	if (strcmp(signature, "OX") == 0)
+	{
+		return Constants::fileExtension::bmp;
+	}
+	return Constants::fileExtension::notKnown;
+}

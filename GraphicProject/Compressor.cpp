@@ -21,6 +21,7 @@ bool Compressor::areThreeInRowSame(const std::vector<std::vector<Constants::oxPi
 	return true;
 }
 
+
 void Compressor::addSequenceOfDifferentSymbols(std::vector<uint8_t> &buffer, std::vector<uint8_t> &destination) {
 	destination.push_back(0); // inform that we will be copying next buffer.size() amount of bits
 	destination.push_back(static_cast<uint8_t>(buffer.size())); // how many to copy
@@ -201,6 +202,9 @@ std::vector<uint8_t> Compressor::compressByteRun(const std::vector<std::vector<C
 }
 
 
+
+
+
 Compressor::Compressor() {
 }
 
@@ -209,16 +213,18 @@ Compressor::~Compressor() {
 }
 
 
-std::vector<uint8_t> Compressor::compress(const std::vector<std::vector<Constants::oxPixel>> &pixels) {
-
+Compressor::CompressedData Compressor::compress(const std::vector<std::vector<Constants::oxPixel>>& pixels) {
+	CompressedData result;
 	std::vector<uint8_t> compressed_rle = compressRle(pixels);
 
 	std::vector<uint8_t> compressed_byterun = compressByteRun(pixels);
 	
 	if (compressed_rle.size() > compressed_byterun.size()) {
-		return  compressed_rle;
-	}else{
-		return  compressed_byterun;
+		result.pixels = compressed_rle;
+		result.compressionType = Constants::rle;
+	} else {
+		result.pixels = compressed_byterun;
+		result.compressionType = Constants::byteRun;
 	}
-
+	return result;
 }

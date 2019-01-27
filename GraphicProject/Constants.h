@@ -9,8 +9,10 @@ private:
 public:
 	typedef uint8_t oxPixel; 
 	enum paletteType { none, dedicated, grey, imposed, bwDith, dedicatedDith };
-	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage};
-	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering};
+	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage, showingImageOxMenu, convertAndSaveOxMenu, oxMenu };
+	enum fileExtension {bmp, ox, notKnown};
+	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering, dedicatedDithering};
+	enum compressionType {byteRun, rle};
 
     /*dimension consts*/
 	static const int PADDING = 24;
@@ -18,6 +20,10 @@ public:
 	static const int BUTTON_HEIGHT = 120;
 	static const int WIDTH = 1080;
 	static const int HEIGHT = 960;
+
+	/*compression type delete later*/
+	static const int COMPRESSION_RLE = 0;
+	static const int COMPRESSION_BYTE_RUN = 1;
 
 	/*colors for buttons*/
 	static const SDL_Color BUTTON_BACKGROUND;
@@ -42,8 +48,12 @@ public:
 	static const std::string BUTTON_IMAGE_DEDICATED;
 	static const std::string BUTTON_IMAGE_GREY;
 	static const std::string BUTTON_IMAGE_BW_DITHERING;
+	static const std::string BUTTON_IMAGE_DEDICATED_DITHERING;
+	static const std::string BUTTON_CONVERT_TO_BMP_AND_SAVE;
+	static const std::string BUTTON_SHOW_OX;
 	static const std::string BUTTON_BACK;
 	static const std::string EXCEPTION_TOO_SMALL_SURFACE;
+	static const std::string WRONG_FILE_EXTENSION;
 	static const std::string APP_NAME;
 
 	static const int SIGNATURE_SIZE = 2;

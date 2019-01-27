@@ -11,8 +11,12 @@ private:
 	// checks for 3 following pixels starting from x and y if vector size is reached returns false
 	static bool areThreeInRowSame(const std::vector<std::vector<Constants::oxPixel>> &pixels, int x, int y);
 public:
+	struct CompressedData {
+		std::vector<uint8_t> pixels;
+		Constants::compressionType compressionType;
+	};
 	//determines which compression is better and compress
-	static std::vector<uint8_t> compress(const std::vector<std::vector<Constants::oxPixel>> &pixels);
+	static CompressedData compress(const std::vector<std::vector<Constants::oxPixel>> &pixels);
 	static std::vector<uint8_t> compressRle(const std::vector<std::vector<Constants::oxPixel>> &pixels);
 	static std::vector<uint8_t> compressByteRun(const std::vector<std::vector<Constants::oxPixel>> &pixels);
 	Compressor();

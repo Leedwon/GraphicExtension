@@ -7,10 +7,10 @@
 
 class Ox {
 public:
+	Constants::compressionType compressionType;
 	Constants::paletteType paletteType;
 	unsigned int width;
 	unsigned int height;
-	bool dithering;
 	// pixells stored as followed pixels[height][width]
 	std::vector<std::vector<Constants::oxPixel>> paletteIndexes;
 	std::vector<std::vector<Constants::oxPixel>> pixels;
