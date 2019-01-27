@@ -282,6 +282,7 @@ int main(int argc, char* args[]) {
 								screenHandler->drawPixels(loadedOx->pixels, 0, 0);
 							else if(loadedOx->paletteType == Constants::imposed) {
 								loadedOx->colorPalette = Converter::createImposedPalette();
+								screenHandler->drawOxFromPalette(loadedOx, 0, 0);
 							}
 							else
 								screenHandler->drawOx(loadedOx, 0, 0);
