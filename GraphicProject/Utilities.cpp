@@ -253,7 +253,8 @@ Constants::fileExtension checkForFileExtension(std::string fileName)
 {
 	std::ifstream ifs(fileName);
 	char signature[Constants::SIGNATURE_SIZE];
-	ifs >> signature;
+	ifs >> signature[0];
+	ifs >> signature[1];
 	ifs.close();
 	if(signature[0] == 'B' && signature[1] == 'M')
 	{
