@@ -16,8 +16,10 @@ public:
 	std::vector<std::vector<Constants::oxPixel>> pixels;
 	std::array<SDL_Color, Constants::PALETTE_SIZE> colorPalette;
 	void setDedicatedPalette(Image* img);
+	void setImposedPalette(Image *img);
 	SDL_Color getPixelFromPalette(int x, int y) { return colorPalette[paletteIndexes[y][x]]; }
 	Constants::oxPixel getPixel(int x, int y) { return pixels[y][x]; }
+	Uint32 *getPixelsForBmp();
 	std::vector<std::vector<Constants::oxPixel>> getPixelsVector() { return pixels; }
 	Ox(Constants::paletteType paletteType, int width, int height, std::vector<std::vector<Constants::oxPixel>> pixelsVector,
 		std::array<SDL_Color, Constants::PALETTE_SIZE> paletteArr);

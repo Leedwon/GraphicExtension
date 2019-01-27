@@ -15,7 +15,7 @@ public:
 	bool checkForPresses(SDL_Event *event);
 	bool isAnyButtonPressed();
 	void draw(SDL_Renderer *renderer, TTF_Font *font);
-	Constants::paletteType getPressedPalette();
+	Constants::paletteType getPaletteType();
 	void setAllButtonsToFalseState();
 	void disableMenu();
 	PaletteMenu();

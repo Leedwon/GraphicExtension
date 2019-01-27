@@ -43,7 +43,7 @@ void PaletteMenu::draw(SDL_Renderer* renderer, TTF_Font* font) {
 	enableAllButtons();
 }
 
-Constants::paletteType PaletteMenu::getPressedPalette() {
+Constants::paletteType PaletteMenu::getPaletteType() {
 	Constants::paletteType paletteType;
 	if (buttonNonePalette.pressed) {
 		paletteType = Constants::none;

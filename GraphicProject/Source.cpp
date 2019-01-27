@@ -5,7 +5,6 @@
 #include "Compressor.h"
 #include "Ox.h"
 #include "Converter.h"
-#include "Button.h"
 #include "Utilities.h"
 #include "MainMenu.h"
 #include "PaletteMenu.h"
@@ -14,6 +13,7 @@
 #include "OxFileIO.h"
 #include "Decompressor.h"
 #include "OxMenu.h"
+#include "Constants.h"
 
 int main(int argc, char* args[]) {
 	SDL_Window* window;
@@ -74,6 +74,8 @@ int main(int argc, char* args[]) {
 	textPlace.y += Constants::BUTTON_HEIGHT;
 	renderText(renderer, "Loading file can take a while, sorry", font, &textPlace, Constants::TEXT_COLOR);
 	SDL_bool done = SDL_FALSE;
+	//refactor later
+	std::string filePathForOxSave;
 	while (!done) {
 		// Program loop
 		while (!done && SDL_PollEvent(&event)) {
@@ -85,6 +87,7 @@ int main(int argc, char* args[]) {
 
 			case (SDL_DROPFILE):
 				dropped_filedir = event.drop.file;
+				filePathForOxSave = dropped_filedir;
 				extension = checkForFileExtension(dropped_filedir);
 				if (extension == Constants::fileExtension::bmp) {
 					loadedImage = new Image(dropped_filedir);
@@ -135,7 +138,7 @@ int main(int argc, char* args[]) {
 					if (paletteMenu.checkForPresses(&event)) {
 						Ox *ox = new Ox(Converter::convertImageToOxRawColors(loadedImage));
 						// when any pressed get palette and navigation to main menu
-						palette = paletteMenu.getPressedPalette();
+						palette = paletteMenu.getPaletteType();
 						ox->paletteType = palette;
 						switch (palette) {
 						case Constants::dedicated:
@@ -146,6 +149,13 @@ int main(int argc, char* args[]) {
 							break;
 						case Constants::bwDith:
 							ox->pixels = ditheringGreyScale(Converter::createGreyScalePixels(loadedImage));
+							break;
+						case Constants::dedicatedDith:
+							ox->setDedicatedPalette(loadedImage);
+							ox->paletteIndexes = ditheringColor(loadedImage->getPixelMap(),*ox);
+							break;
+						case Constants::imposed:
+							ox->setImposedPalette(loadedImage);
 							break;
 						}
 						std::string filePath = getFilenameWithoutExtension(loadedImage->getFilePath());
@@ -248,6 +258,17 @@ int main(int argc, char* args[]) {
 									tooSmallSurfaceExceptionHandle(renderer, font);
 									break;
 								}
+							case Constants::imposedPalette:
+								try {
+									ox->setImposedPalette(loadedImage);
+									screenHandler->drawOxFromPalette(ox, 0, 0);
+									SDL_UpdateWindowSurface(window);
+									break;
+								}
+								catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+									tooSmallSurfaceExceptionHandle(renderer, font);
+									break;
+								}
 							}
 						}
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
@@ -258,14 +279,23 @@ int main(int argc, char* args[]) {
 				case(Constants::oxMenu):
 					if(oxMenu.checkForPresses(&event)) {
 						if(oxMenu.getMenuState() == Constants::showingImageOxMenu) {
-							if (loadedOx->paletteType != Constants::dedicated)
-								screenHandler->drawOx(loadedOx, 0, 0);
-							else
+							if (loadedOx->paletteType == Constants::dedicated || loadedOx->paletteType == Constants::dedicatedDith)
 								screenHandler->drawOxFromPalette(loadedOx, 0, 0);
-							SDL_UpdateWindowSurface(window);
-							menuState == Constants::showingImageOxMenu;
+							else if (loadedOx->paletteType == Constants::grey || loadedOx->paletteType == Constants::bwDith)
+								screenHandler->drawPixels(loadedOx->pixels, 0, 0);
+							else if(loadedOx->paletteType == Constants::imposed) {
+								loadedOx->colorPalette = Converter::createImposedPalette();
+								screenHandler->drawOxFromPalette(loadedOx, 0, 0);
+							}
+							else
+								screenHandler->drawOx(loadedOx, 0, 0);
+							menuState = Constants::showingImageOxMenu;
+							SDL_UpdateWindowSurface(window);		
 						} else if(oxMenu.getMenuState() == Constants::convertAndSaveOxMenu) {
-							// TODO:: save it to bmp I dont know how
+							SDL_Surface * bmpSurface = SDL_CreateRGBSurfaceFrom(loadedOx->getPixelsForBmp(), loadedOx->width, loadedOx->height, 24, loadedOx->width * 4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+							std::string filePath = getFilenameWithoutExtension(filePathForOxSave);
+							filePath += "(createdFromConverter).bmp";
+							SDL_SaveBMP(bmpSurface, filePath.c_str());
 							oxMenu.enableAllButtons();
 							oxMenu.draw(renderer, font);
 							menuState = Constants::oxMenu;
@@ -273,7 +303,7 @@ int main(int argc, char* args[]) {
 					}
 				}
 			case (SDL_KEYDOWN):
-				if(menuState == Constants::showingImage || menuState == Constants::paletteMenu) {
+				if(menuState == Constants::showingImage || menuState == Constants::paletteMenu || menuState == Constants::showingImageOxMenu) {
 					if (event.key.keysym.sym == SDLK_ESCAPE) {
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
