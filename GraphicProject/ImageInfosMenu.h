@@ -15,6 +15,7 @@ public:
 	Button buttonGreyScale;
 	Button buttonBwDithering;
 	Button buttonDedicatedDithering;
+	Button buttonImposedPalette;
 	Image *img;
 	void enableAllButtons();
 	void disableAllButtons();

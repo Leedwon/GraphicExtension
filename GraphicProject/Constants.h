@@ -11,7 +11,7 @@ public:
 	enum paletteType { none, dedicated, grey, imposed, bwDith, dedicatedDith };
 	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage, showingImageOxMenu, convertAndSaveOxMenu, oxMenu };
 	enum fileExtension {bmp, ox, notKnown};
-	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering, dedicatedDithering};
+	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering, dedicatedDithering, imposedPalette};
 	enum compressionType {rle, byteRun};
 
     /*dimension consts*/

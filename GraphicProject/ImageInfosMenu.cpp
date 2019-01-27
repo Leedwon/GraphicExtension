@@ -12,6 +12,7 @@ void ImageInfosMenu::enableAllButtons() {
 	buttonGreyScale.enabled = true;
 	buttonBwDithering.enabled = true;
 	buttonDedicatedDithering.enabled = true;
+	buttonImposedPalette.enabled = true;
 }
 
 void ImageInfosMenu::disableAllButtons() {
@@ -22,6 +23,7 @@ void ImageInfosMenu::disableAllButtons() {
 	buttonGreyScale.enabled = false;
 	buttonBwDithering.enabled = false;
 	buttonDedicatedDithering.enabled = false;
+	buttonImposedPalette.enabled = false;
 }
 
 void ImageInfosMenu::setAllButtonsToFalse() {
@@ -32,6 +34,7 @@ void ImageInfosMenu::setAllButtonsToFalse() {
 	buttonGreyScale.pressed = false;
 	buttonBwDithering.pressed = false;
 	buttonDedicatedDithering.pressed = false;
+	buttonImposedPalette.pressed = false;
 }
 
 void ImageInfosMenu::disableMenu() {
@@ -52,7 +55,9 @@ ImageInfosMenu::ImageInfosMenu(Image* img) :
 	buttonBwDithering(Constants::WIDTH - Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT * 4, Constants::BUTTON_WIDTH,
 	                  Constants::BUTTON_HEIGHT, Constants::BUTTON_IMAGE_BW_DITHERING),
 	buttonDedicatedDithering(Constants::WIDTH - Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT * 5, Constants::BUTTON_WIDTH,
-		Constants::BUTTON_HEIGHT, Constants::BUTTON_IMAGE_DEDICATED_DITHERING), img(img) {
+		Constants::BUTTON_HEIGHT, Constants::BUTTON_IMAGE_DEDICATED_DITHERING),
+	buttonImposedPalette(Constants::WIDTH - Constants::BUTTON_WIDTH, Constants::BUTTON_HEIGHT * 6, Constants::BUTTON_WIDTH,
+		Constants::BUTTON_HEIGHT, Constants::BUTTON_PALETTE_IMPOSED),img(img) {
 }
 
 void ImageInfosMenu::draw(SDL_Renderer* renderer, TTF_Font* font) {
@@ -73,6 +78,7 @@ void ImageInfosMenu::draw(SDL_Renderer* renderer, TTF_Font* font) {
 	buttonGreyScale.draw(renderer, Constants::BUTTON_FRAME, Constants::BUTTON_BACKGROUND, font);
 	buttonBwDithering.draw(renderer, Constants::BUTTON_FRAME, Constants::BUTTON_BACKGROUND, font);
 	buttonDedicatedDithering.draw(renderer, Constants::BUTTON_FRAME, Constants::BUTTON_BACKGROUND, font);
+	buttonImposedPalette.draw(renderer, Constants::BUTTON_FRAME, Constants::BUTTON_BACKGROUND, font);
 }
 
 
@@ -87,11 +93,12 @@ bool ImageInfosMenu::isAnyImageButtonPressed(SDL_Event* event) {
 	buttonDedicatedPalette.pressed = buttonDedicatedPalette.checkForPress(event);
 	buttonGreyScale.pressed = buttonGreyScale.checkForPress(event);
 	buttonDedicatedDithering.pressed = buttonDedicatedDithering.checkForPress(event);
+	buttonImposedPalette.pressed = buttonImposedPalette.checkForPress(event);
 	return isImgBtnPressed();
 }
 
 bool ImageInfosMenu::isImgBtnPressed() {
-	return (buttonRawColors.pressed || buttonOriginalImage.pressed || buttonGreyScale.pressed || buttonDedicatedPalette.pressed || buttonBwDithering.pressed || buttonDedicatedDithering.pressed);
+	return (buttonRawColors.pressed || buttonOriginalImage.pressed || buttonGreyScale.pressed || buttonDedicatedPalette.pressed || buttonBwDithering.pressed || buttonDedicatedDithering.pressed || buttonImposedPalette.pressed);
 }
 
 Constants::imageDrawType ImageInfosMenu::getImageDrawType() {
@@ -109,6 +116,8 @@ Constants::imageDrawType ImageInfosMenu::getImageDrawType() {
 		result = Constants::bwDithering;
 	else if (buttonDedicatedDithering.pressed)
 		result = Constants::dedicatedDithering;
+	else if (buttonImposedPalette.pressed)
+		result = Constants::imposedPalette;
 	return result;
 }
 

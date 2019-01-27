@@ -151,28 +151,10 @@ int main(int argc, char* args[]) {
 							ox->setDedicatedPalette(loadedImage);
 							ox->paletteIndexes = ditheringColor(loadedImage->getPixelMap(),*ox);
 							break;
+						case Constants::imposed:
+							ox->setImposedPalette(loadedImage);
+							break;
 						}
-						//std::vector<Constants::oxPixel> temp = Compressor::compressRle(ox->pixels);
-						//std::vector<Constants::oxPixel> temp2 = Decompressor::decompressRLE(temp);
-						std::vector<Constants::oxPixel> temp = Compressor::compressByteRun(ox->pixels);
-						std::vector<Constants::oxPixel> temp2 = Decompressor::decopressByteRun(temp);
-						//temp = Decompressor::decopressByteRun(temp);
-						for (int i = 0; i < ox->height; i++)
-						{
-							for (int j = 0; j < ox->width; j++)
-							{
-								ox->pixels[i][j] = temp2[i*ox->width + j];
-							}
-						}
-						for(int i = 0; i < ox->height; i++) {
-							for (int j = 0; j < ox->width; j++) {
-								SDL_Color c = Converter::oxPixelToSdlColor(temp2[i*ox->width + j]);
-								screenHandler->setPixel(j, i, c);
-							}
-						}
-						SDL_UpdateWindowSurface(window);
-						screenHandler->drawOx(ox, 0, 0);
-						SDL_UpdateWindowSurface(window);
 						std::string filePath = getFilenameWithoutExtension(loadedImage->getFilePath());
 						filePath += ".ox";
 						OxFileIO::saveOx(filePath, ox);
@@ -273,6 +255,17 @@ int main(int argc, char* args[]) {
 									tooSmallSurfaceExceptionHandle(renderer, font);
 									break;
 								}
+							case Constants::imposedPalette:
+								try {
+									ox->setImposedPalette(loadedImage);
+									screenHandler->drawOxFromPalette(ox, 0, 0);
+									SDL_UpdateWindowSurface(window);
+									break;
+								}
+								catch (SurfaceHandler::SurfaceHandlerExceptions ex) {
+									tooSmallSurfaceExceptionHandle(renderer, font);
+									break;
+								}
 							}
 						}
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
@@ -283,14 +276,17 @@ int main(int argc, char* args[]) {
 				case(Constants::oxMenu):
 					if(oxMenu.checkForPresses(&event)) {
 						if(oxMenu.getMenuState() == Constants::showingImageOxMenu) {
-							if (loadedOx->paletteType == Constants::dedicated)
+							if (loadedOx->paletteType == Constants::dedicated || loadedOx->paletteType == Constants::dedicatedDith)
 								screenHandler->drawOxFromPalette(loadedOx, 0, 0);
-							else if (loadedOx->paletteType == Constants::grey)
+							else if (loadedOx->paletteType == Constants::grey || loadedOx->paletteType == Constants::bwDith)
 								screenHandler->drawPixels(loadedOx->pixels, 0, 0);
+							else if(loadedOx->paletteType == Constants::imposed) {
+								loadedOx->colorPalette = Converter::createImposedPalette();
+							}
 							else
 								screenHandler->drawOx(loadedOx, 0, 0);
-							SDL_UpdateWindowSurface(window);
-							menuState == Constants::showingImageOxMenu;
+							menuState = Constants::showingImageOxMenu;
+							SDL_UpdateWindowSurface(window);		
 						} else if(oxMenu.getMenuState() == Constants::convertAndSaveOxMenu) {
 							// TODO:: save it to bmp I dont know how
 							oxMenu.enableAllButtons();
