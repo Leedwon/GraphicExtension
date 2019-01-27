@@ -54,6 +54,67 @@ void Ox::setImposedPalette(Image *img) {
 	}
 }
 
+Uint32* Ox::getPixelsForBmp()
+{
+	Uint32 *bmpPixels = new Uint32[width * height];
+	Uint32 temp;
+	SDL_Color color;
+	if (paletteType == Constants::dedicated || paletteType == Constants::dedicatedDith || paletteType == Constants::imposed)
+	{
+		if (paletteType == Constants::imposed)
+		{
+			colorPalette = Converter::createImposedPalette();
+		}
+		for (int i = 0; i < height; ++i)
+		{
+			for (int j = 0; j < width; ++j)
+			{
+				color = colorPalette[paletteIndexes[i][j]];
+				temp = color.r << 8;
+				temp |= color.g;
+				temp <<= 8;
+				temp |= color.b;
+				temp <<= 8;
+				temp |= color.a;
+				bmpPixels[i*width + j] = temp;
+			}
+		}
+
+	} else if(paletteType == Constants::bwDith)
+	{
+		for (int i = 0; i < height; ++i)
+		{
+			for (int j = 0; j < width; ++j)
+			{
+				temp = pixels[i][j] << 8;
+				temp |= pixels[i][j];
+				temp <<= 8;
+				temp |= pixels[i][j];
+				temp <<= 8;
+				temp |= 0xff;
+				bmpPixels[i*width + j] = temp;
+			}
+		}
+	} else
+	{
+		for (int i = 0; i < height; ++i)
+		{
+			for (int j = 0; j < width; ++j)
+			{
+				color = Converter::oxPixelToSdlColor(pixels[i][j]);
+				temp = color.r << 8;
+				temp |= color.g;
+				temp <<= 8;
+				temp |= color.b;
+				temp <<= 8;
+				temp |= color.a;
+				bmpPixels[i*width + j] = temp;
+			}
+		}
+	}
+	return bmpPixels;
+}
+
 Ox::Ox(Constants::paletteType palType, int w, int h, std::vector<std::vector<Constants::oxPixel>> pixelsVector,
        std::array<SDL_Color, Constants::PALETTE_SIZE> paletteArr) : paletteType(palType), width(w), height(h),
                                                                     pixels(pixelsVector), colorPalette(paletteArr) {
