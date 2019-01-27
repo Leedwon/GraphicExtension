@@ -249,6 +249,7 @@ Constants::fileExtension checkFile(std::string fileName)
 	std::ifstream ifs("fileName");
 	char signature[Constants::SIGNATURE_SIZE];
 	ifs >> signature;
+	ifs.close();
 	if(strcmp(signature, "BM") == 0)
 	{
 		return Constants::fileExtension::bmp;
