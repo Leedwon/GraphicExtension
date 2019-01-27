@@ -16,12 +16,13 @@ Ox* OxFileIO::readOx(std::string fileName)
 			uint32_t size;
 			uint32_t offsetToPixels;
 			uint8_t compressionType;
+			uint8_t palette;
 			is >> size;
 			is >> offsetToPixels;
 			is >> ox->width;
 			is >> ox->height;
-			is >> ox->paletteType;
-			is >> ox->dithering;
+			is >> palette;
+			ox->paletteType = Header::intToPaletteType(palette);
 			is >> compressionType;
 			switch (ox->paletteType)
 			{
@@ -85,7 +86,6 @@ bool OxFileIO::saveOx(std::string fileName, Ox *ox)
 		os << header.pictureHeader.width;
 		os << header.pictureHeader.height;
 		os << header.pictureHeader.paletteType;
-		os << header.pictureHeader.dithering;
 		os << header.pictureHeader.compressionType;
 		switch (ox->paletteType) {
 		case Constants::paletteType::dedicated:
