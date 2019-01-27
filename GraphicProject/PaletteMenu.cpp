@@ -53,10 +53,11 @@ Constants::paletteType PaletteMenu::getPressedPalette() {
 		paletteType = Constants::grey;
 	} else if (buttonImposedPalette.pressed) {
 		paletteType = Constants::imposed;
-	} else if (buttonBwDithPalette.pressed)
+	} else if (buttonBwDithPalette.pressed) {
 		paletteType = Constants::bwDith;
-	else if (buttonDedicatedDithPalette.pressed)
+	} else if (buttonDedicatedDithPalette.pressed) {
 		paletteType = Constants::dedicatedDith;
+	}
 	return paletteType;
 }
 

@@ -17,4 +17,5 @@ int distanceBetweenColors(const SDL_Color &imageColor, const SDL_Color &paletteC
 std::vector<std::vector<uint8_t>> ditheringGreyScale(const std::vector<std::vector<uint8_t>> &pixelData);
 std::vector<std::vector<uint8_t>> ditheringColor(const std::vector<std::vector<SDL_Color>> &pixelMap, Ox &targetImage);
 void tooSmallSurfaceExceptionHandle(SDL_Renderer *renderer, TTF_Font *font);
-Constants::fileExtension checkFile(std::string fileName);
+std::string getFilenameWithoutExtension(const std::string &str);
+Constants::fileExtension checkForFileExtension(std::string fileName);

@@ -11,6 +11,7 @@
 #include "PaletteMenu.h"
 #include "ImageInfosMenu.h"
 #include <allocators>
+#include "OxFileIO.h"
 
 int main(int argc, char* args[]) {
 	SDL_Window* window;
@@ -19,8 +20,9 @@ int main(int argc, char* args[]) {
 	SDL_Event event; // Declare event handle
 	char* dropped_filedir = nullptr; // Pointer for directory of dropped file
 	Image* image = nullptr;
+	Ox *loadedOx = nullptr;
+	Constants::fileExtension extension;
 	Constants::paletteType palette;
-	Ox *ox = nullptr;
 	Constants::menuState menuState = Constants::dropFileState;
 	bool fileDropped = false;
 	SDL_Init(SDL_INIT_VIDEO); // SDL2 initialization
@@ -73,14 +75,24 @@ int main(int argc, char* args[]) {
 
 			case (SDL_DROPFILE):
 				dropped_filedir = event.drop.file;
-				image = new Image(dropped_filedir);
-				imageInfosMenu = new ImageInfosMenu(image);
+				extension = checkForFileExtension(dropped_filedir);
+				if (extension == Constants::fileExtension::bmp) {
+					image = new Image(dropped_filedir);
+					imageInfosMenu = new ImageInfosMenu(image);
+					SDL_RenderClear(renderer);
+					mainMenu.draw(renderer, font);
+					mainMenu.enableAllButtons();
+					// when file loaded navigate to main menu
+					menuState = Constants::mainMenu;
+				} else if(extension == Constants::fileExtension::ox) {
+					loadedOx = OxFileIO::readOx(dropped_filedir);
+				} else {
+					SDL_RenderClear(renderer);
+					SDL_Rect textPlace{ Constants::WIDTH / 2 - 240, 0, 480, 120 };
+					renderText(renderer, Constants::WRONG_FILE_EXTENSION, font, &textPlace, Constants::TEXT_COLOR);
+				}
 				SDL_free(dropped_filedir); // Free dropped_filedir memory
-				SDL_RenderClear(renderer);
-				mainMenu.draw(renderer, font);
-				mainMenu.enableAllButtons();
-				// when file loaded navigate to main menu
-				menuState = Constants::mainMenu;
+				
 				break;
 			case (SDL_MOUSEBUTTONDOWN):
 				switch (menuState) {
@@ -104,14 +116,31 @@ int main(int argc, char* args[]) {
 					break;
 				case(Constants::paletteMenu):
 					if (paletteMenu.checkForPresses(&event)) {
+						Ox *ox = new Ox(Converter::convertImageToOxRawColors(image));
 						// when any pressed get palette and navigation to main menu
 						palette = paletteMenu.getPressedPalette();
+						ox->paletteType = palette;
+						switch (palette) {
+						case Constants::dedicated:
+							ox->setDedicatedPalette(image);
+							break;
+						case Constants::grey:
+							ox->pixels = Converter::createGreyScalePixels(image);
+							break;
+						case Constants::bwDith:
+							ox->pixels = ditheringGreyScale(Converter::createGreyScalePixels(image));
+							break;
+						}
+						std::string filePath = getFilenameWithoutExtension(image->getFilePath());
+						filePath += ".ox";
+						OxFileIO::saveOx(filePath, ox);
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
 						mainMenu.draw(renderer, font);
 						mainMenu.enableAllButtons();
 						paletteMenu.disableMenu();
 						menuState = Constants::mainMenu;
+
 					}
 					break;
 				case(Constants::fileInfosMenu):
@@ -188,7 +217,7 @@ int main(int argc, char* args[]) {
 					break;
 				}
 			case (SDL_KEYDOWN):
-				if(menuState == Constants::showingImage) {
+				if(menuState == Constants::showingImage || menuState == Constants::paletteMenu) {
 					if (event.key.keysym.sym == SDLK_ESCAPE) {
 						SDL_SetRenderDrawColor(renderer, Constants::APP_BACKGROUND.r, Constants::APP_BACKGROUND.g, Constants::APP_BACKGROUND.b, Constants::APP_BACKGROUND.a);
 						SDL_RenderClear(renderer);
