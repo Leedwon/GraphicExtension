@@ -10,6 +10,7 @@ public:
 	typedef uint8_t oxPixel; 
 	enum paletteType { none, dedicated, grey, imposed, bwDith, dedicatedDith };
 	enum menuState {dropFileState, mainMenu, paletteMenu, fileInfosMenu, compressAndSave, showingImage};
+	enum fileExtension {bmp, ox, notKnow};
 	enum imageDrawType {original, rawColors, dedicatedPalette, greyScale, bwDithering, dedicatedDithering};
 
     /*dimension consts*/
