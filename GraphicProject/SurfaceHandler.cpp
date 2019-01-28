@@ -1,5 +1,9 @@
 #include "SurfaceHandler.h"
 
+void SurfaceHandler::resizeSurface(int width, int height) {
+	surface->w = width;
+	surface->h = height;
+}
 
 SDL_Color SurfaceHandler::getPixel(const int& x, const int& y) {
 	Uint8* pixAddress = getPixelAddress(x, y);
@@ -85,6 +89,7 @@ void SurfaceHandler::setPixel(const int& x, const int& y, int r, int g, int b) {
 void SurfaceHandler::drawImage(Image* image, int startingX, int startingY) {
 	if (image->getWidth() + startingX > surface->w || image->getHeight() + startingY > surface->h)
 		throw TOO_SMALL_SURFACE_EXCEPTION;
+	resizeSurface(image->getWidth(), image->getHeight());
 	for (int height = 0; height < image->getHeight(); ++height) {
 		for (int width = 0; width < image->getWidth(); ++width)
 			setPixel(width + startingX, height + startingY, image->getPixel(width, height));
@@ -94,6 +99,7 @@ void SurfaceHandler::drawImage(Image* image, int startingX, int startingY) {
 void SurfaceHandler::drawOx(Ox* ox, int startingX, int startingY) {
 	if (ox->width + startingX > surface->w || ox->height + startingY > surface->h)
 		throw TOO_SMALL_SURFACE_EXCEPTION;
+	resizeSurface(ox->width, ox->height);
 	for (int height = 0; height < ox->height; ++height) {
 		for (int width = 0; width < ox->width; ++width) {
 			Constants::oxPixel pixel = ox->getPixel(width, height);
@@ -108,6 +114,7 @@ void SurfaceHandler::drawOxFromPalette(Ox* ox, int startingX, int startingY) {
 	if (ox->paletteType != Constants::none) {
 		if (ox->width + startingX > surface->w || ox->height + startingY > surface->h)
 			throw TOO_SMALL_SURFACE_EXCEPTION;
+		resizeSurface(ox->width, ox->height);
 		for (int height = 0; height < ox->height; ++height) {
 			for (int width = 0; width < ox->width; ++width) {
 				setPixel(width + startingX, height + startingY, ox->getPixelFromPalette(width, height));
@@ -117,6 +124,7 @@ void SurfaceHandler::drawOxFromPalette(Ox* ox, int startingX, int startingY) {
 }
 
 void SurfaceHandler::drawPixels(std::vector<std::vector<Constants::oxPixel>> pixels, int startingX, int startingY) {
+	resizeSurface(pixels[0].size(), pixels.size());
 	for (int height = 0; height < pixels.size(); ++height) {
 		for (int width = 0; width < pixels[0].size(); ++width) {
 			Constants::oxPixel currentPix = pixels[height][width];

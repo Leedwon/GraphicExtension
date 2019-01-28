@@ -7,6 +7,8 @@
 
 class SurfaceHandler
 {
+private:
+	void resizeSurface(int width, int height);
 public:
 	enum SurfaceHandlerExceptions {
 		TOO_SMALL_SURFACE_EXCEPTION

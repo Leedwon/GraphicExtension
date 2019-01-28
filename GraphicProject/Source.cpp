@@ -66,8 +66,6 @@ int main(int argc, char* args[]) {
 
 	screenSurface = SDL_GetWindowSurface(window);
 	screenHandler = new SurfaceHandler(screenSurface);
-	SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 255, 255, 255));
-	SDL_UpdateWindowSurface(window);
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
 	SDL_Rect textPlace{ Constants::WIDTH / 2 - 240, 0, 480, 120 };
 	renderText(renderer, "Please drag and drop file that you want to work on", font, &textPlace, Constants::TEXT_COLOR);
@@ -192,6 +190,7 @@ int main(int argc, char* args[]) {
 						if(loadedImage->getWidth() > Constants::WIDTH || loadedImage->getHeight() > Constants::HEIGHT) {
 							tooSmallSurfaceExceptionHandle(renderer, font);
 						} else {
+							SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 255, 255, 255));
 							Ox *ox = new Ox(Converter::convertImageToOxRawColors(loadedImage));
 							Constants::imageDrawType drawType = imageInfosMenu->getImageDrawType();
 							switch (drawType) {
@@ -278,6 +277,7 @@ int main(int argc, char* args[]) {
 					break;
 				case(Constants::oxMenu):
 					if(oxMenu.checkForPresses(&event)) {
+						SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 255, 255, 255));
 						if(oxMenu.getMenuState() == Constants::showingImageOxMenu) {
 							if (loadedOx->paletteType == Constants::dedicated || loadedOx->paletteType == Constants::dedicatedDith)
 								screenHandler->drawOxFromPalette(loadedOx, 0, 0);
@@ -288,7 +288,7 @@ int main(int argc, char* args[]) {
 								screenHandler->drawOxFromPalette(loadedOx, 0, 0);
 							}
 							else
-							screenHandler->drawOx(loadedOx, 0, 0);
+								screenHandler->drawOx(loadedOx, 0, 0);
 							menuState = Constants::showingImageOxMenu;
 							SDL_UpdateWindowSurface(window);		
 						} else if(oxMenu.getMenuState() == Constants::convertAndSaveOxMenu) {
