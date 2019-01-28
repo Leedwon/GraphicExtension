@@ -69,13 +69,14 @@ Uint32* Ox::getPixelsForBmp()
 		{
 			for (int j = 0; j < width; ++j)
 			{
+				/* SDL has a function to save to bmp file but it takes each pixels a Uint32 pack so we have to pack every component into one data chunk*/
 				color = colorPalette[paletteIndexes[i][j]];
-				temp = color.r << 8;
-				temp |= color.g;
+				temp = color.r << 8; // packing red component
+				temp |= color.g; // packing green and shifting to appropriate position
 				temp <<= 8;
-				temp |= color.b;
+				temp |= color.b; // packing blue and shifting to appropriate position
 				temp <<= 8;
-				temp |= color.a;
+				temp |= 255; // packing alfa
 				bmpPixels[i*width + j] = temp;
 			}
 		}
@@ -91,7 +92,7 @@ Uint32* Ox::getPixelsForBmp()
 				temp <<= 8;
 				temp |= pixels[i][j];
 				temp <<= 8;
-				temp |= 0xff;
+				temp |= 255; 
 				bmpPixels[i*width + j] = temp;
 			}
 		}
@@ -107,7 +108,7 @@ Uint32* Ox::getPixelsForBmp()
 				temp <<= 8;
 				temp |= color.b;
 				temp <<= 8;
-				temp |= color.a;
+				temp |= 255;
 				bmpPixels[i*width + j] = temp;
 			}
 		}
