@@ -186,8 +186,5 @@ Compressor::CompressedData Compressor::compress(const std::vector<std::vector<Co
 		result.compressionType = Constants::rle;
 	}
 
-	result.pixels = compressed_byterun;
-	result.compressionType = Constants::byteRun;
-
 	return result;
 }
