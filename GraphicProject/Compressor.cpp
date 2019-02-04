@@ -4,7 +4,7 @@
 bool Compressor::areThreeInRowSame(const std::vector<std::vector<Constants::oxPixel>>& pixels, int x, int y) {
 	if (y >= pixels.size() - 1 && x >= pixels[y].size() - 2) // we can't take three pixels - outOfBounds
 		return false;
-	Constants::oxPixel previous = pixels[y][x];
+	Constants::oxPixel pixelToCompare = pixels[y][x];
 	int index = x;
 	for (int i = 0; i < 3; i++) {
 		// getting 3 pixels
@@ -12,11 +12,9 @@ bool Compressor::areThreeInRowSame(const std::vector<std::vector<Constants::oxPi
 			index = 0;
 			y++;
 		}
-		Constants::oxPixel current = pixels[y][index];
-		index++;
-		if (previous != current)
+		if (pixelToCompare != pixels[y][index])
 			return false;
-		previous = current;
+		index++;
 	}
 	return true;
 }
@@ -52,11 +50,12 @@ std::vector<uint8_t> Compressor::compressRle(const std::vector<std::vector<Const
 			if (!threeInRowSame)
 				threeInRowSame = areThreeInRowSame(pixels, x, y); // when we found that there will be 3 same in row there is no point in updating it after every iteration now we wait for different symbol / end to occur.
 			if (isSame) {
-				sameCount++;
 				if (sameCount == typeRestriction) { // force write because max val for uint8_t is 255
 					addSequenceOfSameSymbols(compressed, current, sameCount);
 					sameCount = 0;
+					threeInRowSame = areThreeInRowSame(pixels,x,y); // this pixel was already saved we will have to check next
 				}
+				sameCount++;
 			}
 			if (!isSame && wasSame && sameCount >= 3) {
 				addSequenceOfSameSymbols(compressed, previous, sameCount);
@@ -71,7 +70,6 @@ std::vector<uint8_t> Compressor::compressRle(const std::vector<std::vector<Const
 				if (isSame && sameCount == 2 && buffer.size() == 2) {
 					addSequenceOfSameSymbols(compressed, current, sameCount);
 					buffer.clear();
-					sameCount = 1;
 				}
 				sameCount = 1;
 			} else if (buffer.size() > 0) {
@@ -118,11 +116,12 @@ for (int y = 0; y < pixels.size(); ++y) {
 		if (!threeInRowSame)
 			threeInRowSame = areThreeInRowSame(pixels, x, y); // when we found that there will be 3 same in row there is no point in updating it after every iteration now we wait for different symbol / end to occur.
 		if (isSame) {
-			sameCount++;
 			if (sameCount == typeRestriction) { // force write because max val for uint8_t is 255
 				addSequenceOfSameSymbols(compressed, current, sameCount-1+128);
 				sameCount = 0;
+				threeInRowSame = areThreeInRowSame(pixels, x, y);
 			}
+			sameCount++;
 		}
 		if (!isSame && wasSame && sameCount >= 3) {
 			addSequenceOfSameSymbols(compressed, previous, sameCount - 1 + 128);
