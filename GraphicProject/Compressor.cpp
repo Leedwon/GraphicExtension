@@ -53,7 +53,7 @@ std::vector<uint8_t> Compressor::compressRle(const std::vector<std::vector<Const
 				if (sameCount == typeRestriction) { // force write because max val for uint8_t is 255
 					addSequenceOfSameSymbols(compressed, current, sameCount);
 					sameCount = 0;
-					threeInRowSame = areThreeInRowSame(pixels,x,y); // this pixel was already saved we will have to check next
+					threeInRowSame = areThreeInRowSame(pixels,x,y); 
 				}
 				sameCount++;
 			}
