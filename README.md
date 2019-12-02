@@ -30,3 +30,5 @@ RLE:
 App provides converter from .bmp to .OX and conversly. 
 
 SDL2 library was used to create app.
+
+Project was done in collaboration with https://github.com/SzymonOlek
